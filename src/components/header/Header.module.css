@@ -101,6 +101,7 @@
 @media screen and (max-width: 768px) {
   .menuToggle {
     display: block;
+    margin-right: 4rem;
   }
 
   .link {
