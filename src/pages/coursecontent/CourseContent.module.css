@@ -1,0 +1,20 @@
+.courseContent {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 5rem;
+    height: 70vh;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  iframe {
+    border: none;
+    border-radius: 8px;
+  }
+  

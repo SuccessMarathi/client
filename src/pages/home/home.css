@@ -1,0 +1,179 @@
+.home {
+
+  margin-top: 5rem;
+ 
+    button {
+      padding: 12px 24px;
+      background: #004AAD;
+      color: white;
+      font-weight: bolder;
+    }
+
+    button:hover{
+      background: #333333;
+    }
+
+    max-width: 100vw;
+   
+}
+
+
+/* Hero Section */
+.hero {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full screen height */
+  background-color: #ffffff;
+  padding: 20px;
+  margin-top: 5rem;
+
+}
+
+/* Left Section (Main Content) */
+.mainContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: 20px;
+  width: 100%;
+}
+
+/* Text Section */
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.success {
+  font-size: 8rem;
+  font-weight: 700;
+  color: #004AAD;
+}
+
+.marathi {
+  font-size: 7rem;
+  font-weight: 700;
+  color: #FF914A;
+  margin-top: -10px;
+}
+
+/* Icon Section */
+.homeimgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.homeimgContainer img{
+  width: 30rem;
+  border-radius: 2rem;
+}
+
+
+
+
+/* Right Section (About Company and Mission) */
+.aboutSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  padding-top: 20px;
+  padding: 5rem;
+ 
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #004AAD;
+  margin-bottom: 10px;
+}
+
+.text {
+  font-size: 1.2rem;
+  color: #333333;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  max-width: 90%;
+}
+
+/* Founder Section */
+.founderSection {
+  display: flex;
+  align-items: center;
+  width: 85%;
+  padding: 10px 0;
+  padding: 2rem;
+  background-color: #f4f4f4; /* Light gray background */
+  margin-bottom: 5rem;
+}
+
+.founderImage {
+  width: 8rem;
+  border-radius: 2rem;
+  margin-right: 20px;
+}
+
+.founderText {
+  font-size: 1.3rem;
+  color: #333333;
+  line-height: 1.5;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .hero {
+    height: auto; /* Allow content stacking */
+
+  }
+
+  .mainContent {
+    flex-direction: column-reverse;
+  }
+
+  .icon {
+    font-size: 6rem;
+  }
+
+  .success, .marathi {
+    font-size: 3rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .text {
+    font-size: 1rem;
+  }
+  
+  .aboutSection{
+      padding: 1rem;
+  }
+
+  .founderSection {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 1.5rem;
+  }
+
+  .founderImage {
+    width: 100px;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .founderSection p{
+      font-size: 1rem;
+  }
+
+  .imgContainer img{
+    width: 10rem;
+  }
+}
+

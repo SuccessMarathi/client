@@ -1,0 +1,46 @@
+.footer {
+  background-color: #004AAD;
+  color: #ffffff;
+  padding: 20px 0;
+  text-align: center;
+  position: relative;
+      width: 100%;
+      margin-top: 2rem;
+      margin-left: 0;
+    
+}
+
+.footerContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.siteName {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.footerMarathi {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.footerLinks {
+  margin: 10px 0;
+}
+
+.footerLink {
+  color: #ffffff;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.footerLink:hover {
+  text-decoration: underline;
+}
+
+.owner {
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
