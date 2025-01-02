@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { server } from "../.."; // Assuming your server URL
+import { server } from "../../index.js"; // Assuming your server URL
 import styles from "./Dashboard.module.css"; // Modular CSS file
-import { toast } from "react-hot-toast"; // Importing toast library
+import { TbMoneybag } from "react-icons/tb";
+import { GiReceiveMoney , GiTakeMyMoney , GiOpenTreasureChest} from "react-icons/gi";
+
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -28,35 +30,49 @@ const Dashboard = () => {
     return <div>Loading...</div>;
   }
 
-  const roundedEarnings = Math.round(user.earnings || 0);
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(user.referralLink);
-      toast.success("Referral link copied!");
-    } catch (err) {
-      console.error("Failed to copy text: ", err);
-    }
-  };
-
   return (
     <div className={styles.dashboard}>
-      <h2>My Dashboard</h2>
+    
       <h1 className={styles.userName}>{user.name}</h1>
 
       <div className={styles.section}>
-        <div className={styles.referralSection}>
-          <h3>Referral Link</h3>
-          <div className={styles.referralLink}>
-            <span>{user.referralLink}</span>
-            <button className={styles.copyButton} onClick={handleCopy}>Copy</button>
+        <div className={styles.earningBox}>
+          <div className={styles.earnLeft}>
+            <p>{user.earnings.today || 0}/-</p>
+            <h4>Today's Earnings</h4>
+          </div>
+          <div className={styles.earnRight}>
+          <TbMoneybag />
           </div>
         </div>
 
-        <div className={styles.earningsSection}>
-          <h3>Total Earnings</h3>
-          <div className={styles.earningBox}>
-            <p>{roundedEarnings || 0}/-</p>
+        <div className={styles.earningBox}>
+          <div className={styles.earnLeft}>
+            <p>{user.earnings.month || 0}/-</p>
+            <h4>30 days Earnings</h4>
+          </div>
+          <div className={styles.earnRight}>
+            <GiReceiveMoney/>
+          </div>
+        </div>
+
+        <div className={styles.earningBox}>
+          <div className={styles.earnLeft}>
+            <p>{user.earnings.week || 0}/-</p>
+            <h4>7 days Earnings</h4>
+          </div>
+          <div className={styles.earnRight}>
+            <GiTakeMyMoney/>
+          </div>
+        </div>
+
+        <div className={styles.earningBox}>
+          <div className={styles.earnLeft}>
+            <p>{user.earnings.total || 0}/-</p>
+            <h4>Total Earnings</h4>
+          </div>
+          <div className={styles.earnRight}>
+            <GiOpenTreasureChest/>
           </div>
         </div>
       </div>

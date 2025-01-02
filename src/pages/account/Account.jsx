@@ -1,14 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdDashboard } from "react-icons/md";
 import "./account.css";
 import { IoMdLogOut } from "react-icons/io";
 import { UserData } from "../../context/UserContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";  // Import axios for API calls
+import { server } from "../../"; // Import your server configuration
 
-const Account = ({ user, referrer }) => {
+const Account = ({ user }) => {
   const { setIsAuth, setUser } = UserData();
   const navigate = useNavigate();
+  const [referrer, setReferrer] = useState(null);
+
+  const fetchReferrer = async () => {
+    try {
+      const response = await axios.get(`${server}/api/user/referrer/${user._id}`, {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      });
+      setReferrer(response.data.referrer);
+    } catch (error) {
+      console.error("Error fetching referrer:", error);
+      toast.error("Error fetching referrer data");
+    }
+  };
+
+  if (user) {
+    fetchReferrer();
+  }
 
   const logoutHandler = () => {
     localStorage.clear();
@@ -52,7 +73,7 @@ const Account = ({ user, referrer }) => {
               </div>
             </div>
 
-            <div className="section sponsorinfo" >
+            <div className="section sponsorinfo">
               <h3>Sponsor Section</h3>
               <p>
                 <strong>Referrer Name: </strong>
@@ -67,6 +88,8 @@ const Account = ({ user, referrer }) => {
                 {referrer?.contact || "N/A"}
               </p>
             </div>
+          </div>
+
           <div className="profielbtns">
             <button
               onClick={() => navigate(`/${user._id}/dashboard`)}
@@ -93,8 +116,6 @@ const Account = ({ user, referrer }) => {
               <IoMdLogOut />
               Logout
             </button>
-
-            </div>
           </div>
         </div>
       )}
