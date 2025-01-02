@@ -51,7 +51,7 @@ const Header = ({ isAuth }) => {
 
           {isAuth ? (
             <Link to={"/account"} onClick={toggleSidebar}>
-              Account
+              My profile
             </Link>
           ) : (
             <Link to={"/login"} onClick={toggleSidebar}>
