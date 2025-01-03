@@ -44,15 +44,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className={styles.earningBox}>
-          <div className={styles.earnLeft}>
-            <p>{Math.round(user.earnings.month || 0)}/-</p>
-            <h4>30 Days Earnings</h4>
-          </div>
-          <div className={styles.earnRight}>
-            <GiReceiveMoney />
-          </div>
-        </div>
+     
 
         <div className={styles.earningBox}>
           <div className={styles.earnLeft}>
@@ -63,6 +55,17 @@ const Dashboard = () => {
             <GiTakeMyMoney />
           </div>
         </div>
+
+        <div className={styles.earningBox}>
+          <div className={styles.earnLeft}>
+            <p>{Math.round(user.earnings.month || 0)}/-</p>
+            <h4>30 Days Earnings</h4>
+          </div>
+          <div className={styles.earnRight}>
+            <GiReceiveMoney />
+          </div>
+        </div>
+        
 
         <div className={styles.earningBox}>
           <div className={styles.earnLeft}>
