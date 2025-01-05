@@ -11,14 +11,12 @@ const AdminDashbord = ({ user }) => {
   const [stats, setStats] = useState([]);
   const [users, setUsers] = useState([]);
 
-  // Redirect if the user is not an admin
   useEffect(() => {
     if (user && user.role !== "admin") {
       navigate("/");
     }
   }, [user, navigate]);
 
-  // Fetch statistics
   async function fetchStats() {
     try {
       const { data } = await axios.get(`${server}/api/stats`, {
@@ -33,7 +31,6 @@ const AdminDashbord = ({ user }) => {
     }
   }
 
-  // Fetch user list
   async function fetchUsers() {
     try {
       const { data } = await axios.get(`${server}/api/admin/users`, {
@@ -48,7 +45,6 @@ const AdminDashbord = ({ user }) => {
     }
   }
 
-  // Fetch data on component mount
   useEffect(() => {
     fetchStats();
     fetchUsers();
@@ -80,7 +76,7 @@ const AdminDashbord = ({ user }) => {
                 <th>#</th>
                 <th>Name</th>
                 <th>Phone Number</th>
-                <th>Earnings</th>
+                <th>Total Earnings</th>
               </tr>
             </thead>
             <tbody>
@@ -89,7 +85,7 @@ const AdminDashbord = ({ user }) => {
                   <td>{index + 1}</td>
                   <td>{user.name}</td>
                   <td>{user.contact}</td>
-                  <td>{user.earnings}</td>
+                  <td>{Math.floor(user.earnings)}</td> {/* Apply Math.floor */}
                 </tr>
               ))}
             </tbody>
