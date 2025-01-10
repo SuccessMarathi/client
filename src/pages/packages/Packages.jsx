@@ -25,7 +25,7 @@ const Packages = () => {
       id: 1,
       image: silver,
       title: "Silver Package",
-      price: "499/-",
+      price: "199/-",
       description: "Ideal for beginners who want to get started.",
     },
     {
