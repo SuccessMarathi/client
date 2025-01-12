@@ -28,6 +28,8 @@ import Packages from "./pages/packages/Packages";
 import MyCourses from "./pages/mycourses/MyCourses";
 import CourseContent from "./pages/coursecontent/CourseContent";
 
+import MyAffiliates from "./pages/affiliates/MyAffiliates";
+
 
 const App = () => {
   const { isAuth, user, loading } = UserData();
@@ -85,6 +87,13 @@ const App = () => {
               path="/course-content/:courseId"
               element={isAuth ? <CourseContent user={user}/> : <Login />}
             />
+
+            
+             <Route
+              path="/my-affiliates"
+              element={isAuth ? <MyAffiliates user={user}/> : <Login />}
+            />
+            
 
 
 
