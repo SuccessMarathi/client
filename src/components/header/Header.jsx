@@ -46,6 +46,10 @@ const Header = ({ isAuth }) => {
             Dashboard
           </Link>
 
+          <Link to={"/leaderboard"} onClick={toggleSidebar}>
+            Leaderboard
+          </Link>
+
           <Link to={"/my-affiliates"} onClick={toggleSidebar}>
             My Affiliates
           </Link>

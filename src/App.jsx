@@ -29,6 +29,7 @@ import MyCourses from "./pages/mycourses/MyCourses";
 import CourseContent from "./pages/coursecontent/CourseContent";
 
 import MyAffiliates from "./pages/affiliates/MyAffiliates";
+import Leaderboard from "./pages/leaderboard/Leaderboard";
 
 
 const App = () => {
@@ -93,6 +94,15 @@ const App = () => {
               path="/my-affiliates"
               element={isAuth ? <MyAffiliates user={user}/> : <Login />}
             />
+
+               
+             <Route
+              path="/leaderboard"
+              element={isAuth ? <Leaderboard user={user}/> : <Login />}
+            />
+
+
+
             
 
 
