@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"; 
 import axios from "axios";
 import { server } from "../../index.js"; // Assuming your server URL
 import styles from "./Dashboard.module.css"; // Modular CSS file
 import { TbMoneybag } from "react-icons/tb";
 import { GiReceiveMoney, GiTakeMyMoney, GiOpenTreasureChest } from "react-icons/gi";
 
+import blank from './default.png'
+
 const Dashboard = () => {
   const [user, setUser] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     async function fetchUser() {
@@ -22,7 +25,21 @@ const Dashboard = () => {
       }
     }
 
+    async function fetchProfileImage() {
+      try {
+        const { data } = await axios.get(`${server}/api/profile-image`, {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        });
+        setProfileImage(data.profileImage); // Assuming the endpoint returns profile image URL
+      } catch (error) {
+        console.error("Error fetching profile image", error);
+      }
+    }
+
     fetchUser();
+    fetchProfileImage();  // Fetch the profile image URL
   }, []);
 
   if (!user) {
@@ -31,7 +48,15 @@ const Dashboard = () => {
 
   return (
     <div className={styles.dashboard}>
-      <h1 className={styles.userName}>{user.name}</h1>
+      <div className={styles.userInfo}>
+        {/* Display user profile image if exists */}
+        <img 
+          src={profileImage || blank} // Default avatar if no profile image
+          alt="User Profile"
+          className={styles.profileImage}
+        />
+        <h1 className={styles.userName}>{user.name}</h1>
+      </div>
 
       <div className={styles.section}>
         <div className={styles.earningBox}>
@@ -43,8 +68,6 @@ const Dashboard = () => {
             <TbMoneybag />
           </div>
         </div>
-
-     
 
         <div className={styles.earningBox}>
           <div className={styles.earnLeft}>
@@ -65,7 +88,6 @@ const Dashboard = () => {
             <GiReceiveMoney />
           </div>
         </div>
-        
 
         <div className={styles.earningBox}>
           <div className={styles.earnLeft}>

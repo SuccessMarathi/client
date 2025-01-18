@@ -1,0 +1,94 @@
+.container {
+    background: linear-gradient(135deg, #ffdfb7, hsl(50, 100%, 94%)); /* Orange gradient background */
+    border-radius: 16px;
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 12rem;
+    margin-top: 5rem;
+  }
+  
+  .heading {
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 20px;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .imagePreview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px dashed black;
+    border-radius: 12px;
+    height: 200px;
+    margin-bottom: 15px;
+  }
+  
+  .previewImage {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 12px;
+  }
+  
+  .placeholder {
+    color: gray;
+    font-size: 16px;
+    font-style: italic;
+  }
+  
+  .fileInput {
+    border: none;
+    background: rgb(240, 240, 240);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 1px solid black;
+  }
+  
+  .uploadButton {
+    background: rgb(240, 240, 240);
+    color: darkblue;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    border: 1px solid black;
+  }
+  
+  .uploadButton:hover {
+    background: #f3f3f3;
+  }
+  
+  .uploadButton:disabled {
+    background: #ddd;
+    color: #aaa;
+    cursor: not-allowed;
+  }
+  
+  .success {
+    color: green;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  

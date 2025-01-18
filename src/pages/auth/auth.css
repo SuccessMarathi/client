@@ -4,6 +4,7 @@
   justify-content: center;
   height: 80vh;
   background-color: white;
+  margin-top: 3rem;
 
   .auth-form {
     background-color: #fff;

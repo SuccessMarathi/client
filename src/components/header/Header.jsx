@@ -54,6 +54,11 @@ const Header = ({ isAuth }) => {
             My Affiliates
           </Link>
 
+          <Link to={"/update-profile"} onClick={toggleSidebar}>
+            Update Profile
+          </Link>
+
+
 
 
 

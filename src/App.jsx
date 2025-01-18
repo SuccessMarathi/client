@@ -31,6 +31,8 @@ import CourseContent from "./pages/coursecontent/CourseContent";
 import MyAffiliates from "./pages/affiliates/MyAffiliates";
 import Leaderboard from "./pages/leaderboard/Leaderboard";
 
+import UpdateProfile from "./pages/updateProfile/UpdateProfile";
+
 
 const App = () => {
   const { isAuth, user, loading } = UserData();
@@ -99,6 +101,11 @@ const App = () => {
              <Route
               path="/leaderboard"
               element={isAuth ? <Leaderboard user={user}/> : <Login />}
+            />
+
+<Route
+              path="/update-profile"
+              element={isAuth ? <UpdateProfile user={user}/> : <Login />}
             />
 
 

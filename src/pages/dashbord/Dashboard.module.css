@@ -91,6 +91,29 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
+.profileImage{
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  margin-top: 0.65rem;
+  border: 1px solid black;
+}
+
+.userInfo{
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: space-around;
+  text-align: center;
+  padding: 0;
+  margin-bottom: 2rem;
+}
+
+.userName{
+  font-size: 3rem;
+  margin-bottom: -0.5rem;
+}
+
 @media (max-width: 600px) {
   .section {
     flex-direction: column;  /* Stacks elements vertically on small screens */
