@@ -151,4 +151,15 @@
     margin-bottom: 0.6rem;
   
   }
+
+  .dashboard{
+    margin-top: 4rem;
+  }
+
+  .userInfo{
+    gap: 0;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+  }
 }

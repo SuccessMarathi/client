@@ -92,3 +92,11 @@
     margin-top: 10px;
   }
   
+
+  @media (max-width:768px){
+    .container{
+        width: 17.5rem;
+        margin-top: 6rem;
+        margin-bottom: 4rem;
+    }
+  }
