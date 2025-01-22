@@ -3,10 +3,13 @@ import axios from "axios";
 import styles from "./Packages.module.css";
 import { server } from "../..";
 // Import images
-import silver from "../../Assets/silver.jpg";
-import gold from "../../Assets/gold.jpg";
-import diamond from "../../Assets/diamond.jpg";
-import platinum from "../../Assets/platinum.jpg";
+import beginner from "../../Assets/biginnerNew.jpg";
+import silver from "../../Assets/silverNew.jpg";
+import elite from "../../Assets/eliteNew.jpg";
+import gold from "../../Assets/goldNew.jpg";
+import diamond from "../../Assets/diamondNew.jpg";
+import platinum from "../../Assets/platinumNew.jpg";
+
 import qrCode from "../../Assets/akashQR.jpg"; // Add your QR image here
 
 const Packages = () => {
@@ -23,27 +26,41 @@ const Packages = () => {
   const packages = [
     {
       id: 1,
-      image: silver,
-      title: "Silver Package",
+      image: beginner,
+      title: "Beginner Package",
       price: "199/-",
       description: "Ideal for beginners who want to get started.",
     },
     {
       id: 2,
-      image: gold,
-      title: "Gold Package",
-      price: "999/-",
+      image: elite,
+      title: "Elite Package",
+      price: "399/-",
       description: "Perfect for intermediate users looking to improve.",
     },
     {
       id: 3,
-      image: diamond,
-      title: "Diamond Package",
-      price: "2199/-",
+      image: silver,
+      title: "Silver Package",
+      price: "699/-",
       description: "Advanced features for professional users.",
     },
     {
       id: 4,
+      image: gold,
+      title: "Gold Package",
+      price: "999/-",
+      description: "All-in-one solution for all your needs.",
+    },
+    {
+      id: 5,
+      image: diamond,
+      title: "Diamond Package",
+      price: "2199/-",
+      description: "All-in-one solution for all your needs.",
+    },
+    {
+      id: 6,
       image: platinum,
       title: "Platinum Package",
       price: "4999/-",
