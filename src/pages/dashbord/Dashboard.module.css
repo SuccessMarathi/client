@@ -1,165 +1,150 @@
 .dashboard {
   padding: 20px;
-  background-color: #f9f9f9;
-  margin-top: 4rem;
+  max-width: 600px;
+  margin: auto;
+  background-color: #fafafa;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 5rem;
+  margin-bottom: 10rem;
+}
+
+.userInfo {
+  position: relative;
+  background-color: #f4f4f4;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 70vh;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.courseLabel {
+  position: absolute;
+  top: 10px;
+  right: -30px;
+  background-color:#d1c5ff;
+  color: black;
+  padding: 5px 15px;
+  font-weight: bold;
+  transform: rotate(45deg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+}
+
+.above {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profileImage {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #6a44fe;
 }
 
 .userName {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  margin-top: 1rem;
+  color: #333;
 }
 
 .section {
-  display: flex;
-  width: 60%;
-  align-items: center;
-  justify-content: space-around;
-  flex-wrap: wrap;  /* Ensures items wrap when screen size reduces */
-}
-
-.earningsSection {
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  border: 1px solid black;
-  border-radius: 2rem;
-  padding: 3rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
 }
 
 .earningBox {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #ffc6a0;
-  border-radius: 1rem;
-  font-size: 1.5rem;
-  width: 60%;
-  max-height: 5rem;
-  text-align: center;
-  margin-bottom: 1rem;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 10px;
   display: flex;
-  align-items: center;  /* Centers the content vertically */
-  justify-content: space-around;  /* Ensures balance between number and title */
-}
-
-.earningBox .earnLeft {
-  display: flex;
-  flex-direction: column;
-  justify-content: baseline;
-  align-items: center;  /* Centers the content horizontally */
-}
-
-.earningBox .earnRight {
-  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: 4rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  transition: transform 0.2s ease;
 }
 
-.earningBox {
-  text-align: center;
-  background: linear-gradient(90deg, #FFD700, #FF8C00);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border: 1px solid gray;
-  width: 90%;
-  border-radius: 2rem;
-
-  h4 {
-    font-size: 1.2rem;
-    margin-top: 1rem;
-  }
-
-  p {
-    font-size: 2rem;
-    margin-bottom: 0.2rem;
-  
-    font-weight: bolder;
-
-  }
+.earningBox:hover {
+  transform: translateY(-5px);
 }
 
-.earningBox:hover{
-  border: 1px solid black;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+.earnLeft {
+  text-align: left;
 }
 
-.profileImage{
-  width: 4rem;
-  height: 4rem;
-  border-radius: 50%;
-  margin-top: 0.65rem;
-  border: 1px solid black;
+.earnLeft p {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
 }
 
-.userInfo{
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-  justify-content: space-around;
-  text-align: center;
-  padding: 0;
-  margin-bottom: 2rem;
+.earnLeft h4 {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 5px 0 0;
 }
 
-.userName{
-  font-size: 3rem;
-  margin-bottom: -0.5rem;
+.earnRight {
+  font-size: 2rem;
+  color: #6a44fe;
 }
 
+/* --------- Responsive Design for Mobile Screens --------- */
 @media (max-width: 600px) {
-  .section {
-    flex-direction: column;  /* Stacks elements vertically on small screens */
-  }
-
-  .earningBox {
-    max-height: 7rem;
-  }
-
-  .earningsSection h3 {
-    font-size: 1.5rem;
-  }
-
-  .earningsSection {
-    padding: 2rem;
-  }
-
   .dashboard {
-    margin-top: 2rem;
-  }
-}
-
-@media (max-width: 768px) {
-
-  .section{
-    width: 100%;
-  }
-  
-  .earningsSection{
-    margin-top: -10px;
-  }
-  .earningBox {
-    max-height: 7rem;
-    width: 90%;
-    margin-bottom: 0.6rem;
-  
+    padding: 15px;
   }
 
-  .dashboard{
-    margin-top: 4rem;
+  .userInfo {
+    padding: 0.8rem;
   }
 
-  .userInfo{
-    gap: 0;
-    align-items: center;
-    justify-content: space-between;
+  .courseLabel {
+    top: 5px;
+    right: -25px;
+    font-size: 0.8rem;
+    padding: 4px 10px;
+  }
+
+  .above {
     flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .profileImage {
+    width: 70px;
+    height: 70px;
+  }
+
+  .userName {
+    font-size: 1.2rem;
+  }
+
+ 
+
+  .earningBox {
+    padding: 12px;
+  }
+
+  .earnLeft p {
+    font-size: 1.2rem;
+  }
+
+  .earnLeft h4 {
+    font-size: 0.85rem;
+  }
+
+  .earnRight {
+    font-size: 1.8rem;
   }
 }

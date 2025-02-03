@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react"; 
 import axios from "axios";
-import { server } from "../../index.js"; // Assuming your server URL
-import styles from "./Dashboard.module.css"; // Modular CSS file
+import { server } from "../../index.js";
+import styles from "./Dashboard.module.css";
 import { TbMoneybag } from "react-icons/tb";
 import { GiReceiveMoney, GiTakeMyMoney, GiOpenTreasureChest } from "react-icons/gi";
+import blank from './default.png';
 
-import blank from './default.png'
+const courseNames = {
+  "1": "Beginner",
+  "2": "Elite",
+  "3": "Silver",
+  "4": "Gold",
+  "5": "Diamond",
+  "6": "Platinum"
+};
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -32,30 +40,40 @@ const Dashboard = () => {
             token: localStorage.getItem("token"),
           },
         });
-        setProfileImage(data.profileImage); // Assuming the endpoint returns profile image URL
+        setProfileImage(data.profileImage);
       } catch (error) {
         console.error("Error fetching profile image", error);
       }
     }
 
     fetchUser();
-    fetchProfileImage();  // Fetch the profile image URL
+    fetchProfileImage();
   }, []);
 
   if (!user) {
     return <div>Loading...</div>;
   }
 
+  const highestCourse = user.purchasedCourses.reduce((max, courseId) => {
+    return courseNames[courseId] > courseNames[max] ? courseId : max;
+  }, user.purchasedCourses[0]);
+
   return (
     <div className={styles.dashboard}>
       <div className={styles.userInfo}>
-        {/* Display user profile image if exists */}
-        <img 
-          src={profileImage || blank} // Default avatar if no profile image
-          alt="User Profile"
-          className={styles.profileImage}
-        />
-        <h1 className={styles.userName}>{user.name}</h1>
+        {highestCourse && (
+          <div className={styles.courseLabel}>
+            {courseNames[highestCourse]}
+          </div>
+        )}
+        <div className={styles.above}>
+          <img 
+            src={profileImage || blank}
+            alt="User Profile"
+            className={styles.profileImage}
+          />
+          <h1 className={styles.userName}>{user.name}</h1>
+        </div>
       </div>
 
       <div className={styles.section}>
