@@ -1,85 +1,74 @@
-/* Leaderboard.module.css */
-
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #ff8c00, #FFD700);
-    padding: 20px;
-  }
-  
-  .header {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 2rem;
+  color: #d4af37; /* Gold color for crown */
+  margin-bottom: 10px;
+  margin-top: 3rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #333;
+  color: white;
+}
+
+.profileImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #d4af37; /* Gold border */
+}
+
+.defaultAvatar {
+  width: 40px;
+  height: 40px;
+
+  background-color: #ccc;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  color: white;
+  align-self: center;
+  justify-self: center;
+}
+
+.loader {
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 20px;
+  color: #555;
+}
+
+
+@media(max-width:768px){
+  .header{
     font-size: 2rem;
-    font-weight: bold;
-    color: black;
-    text-align: center;
- 
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: -2rem;
- 
-    h1{
-        background: linear-gradient(to right, #004197, #00285d);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
- }
-  
-  
-  .table {
-    width: 90%;
-    max-width: 800px;
-    border-collapse: collapse;
-    margin: 0 auto;
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 10px;
-    overflow: hidden;
   }
-  
-  .table th,
-  .table td {
-    padding: 15px 20px;
-    text-align: center;
-    color: black;
-    border-bottom: 1px solid rgba(53, 53, 53, 0.2);
-  }
-  
-  .table th {
-    font-size: 1.2rem;
-    font-weight: bolder;
-    text-align: center;
-    background: rgba(255, 255, 255, 0.2);
-  }
-  
-  .table tr:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-  
-  .table tbody tr:last-child td {
-    border-bottom: none;
-  }
-  
-  .loader {
-    font-size: 1.5rem;
-    color: white;
-    text-align: center;
-  }
-  
 
-  @media (max-width:786px){
-    .header{
-        font-size: 1rem;
-        margin-bottom: -1rem;
-        margin-top: -1rem;
-    }
-
-
+  .title{
+    font-size: 2rem;
   }
+}
