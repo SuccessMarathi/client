@@ -103,6 +103,8 @@
 @media (max-width: 600px) {
   .dashboard {
     padding: 15px;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 
   .userInfo {
@@ -117,7 +119,7 @@
   }
 
   .above {
-    flex-direction: column;
+  
     gap: 0.5rem;
   }
 
