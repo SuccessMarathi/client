@@ -13,6 +13,11 @@ function Footer() {
           <Link to="/privacy-policy" className="footerLink">Privacy Policy</Link>
           <span> | </span>
           <Link to="/terms-and-conditions" className="footerLink">Terms and Conditions</Link>
+          <br/>
+          <Link to="/CancellationRefund" className="footerLink">Cancellation and Refund</Link>
+          <span> | </span>
+          <Link to="/ContactUs" className="footerLink">Contact Us</Link>
+
         </div>
         <p className="owner">© 2024 Akash Rathod. All Rights Reserved.</p>
       </div>

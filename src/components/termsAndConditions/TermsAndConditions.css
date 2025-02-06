@@ -1,0 +1,65 @@
+/* Global Styles */
+
+  /* Main Container */
+  .terms-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    margin-top: 3rem;
+  }
+  
+  /* Terms Card */
+  .terms-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 700px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+  }
+  
+  /* Title */
+  .title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #1a237e;
+  }
+  
+  /* Updated Date */
+  .updated {
+    text-align: center;
+    font-size: 14px;
+    color: #616161;
+    margin-bottom: 20px;
+  }
+  
+  /* Terms Content */
+  .terms-content h2 {
+    color: #1a237e;
+    font-size: 20px;
+    margin-top: 20px;
+  }
+  
+  .terms-content p {
+    font-size: 16px;
+    color: #424242;
+    line-height: 1.6;
+  }
+  
+  /* Email Link */
+  .terms-content a {
+    color: #1976d2;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .terms-content a:hover {
+    text-decoration: underline;
+  }
+
+  strong{
+    color: red;
+  }

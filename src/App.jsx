@@ -33,6 +33,11 @@ import Leaderboard from "./pages/leaderboard/Leaderboard";
 
 import UpdateProfile from "./pages/updateProfile/UpdateProfile";
 
+import PrivacyPolicy from "./components/privacyPolicy/PrivacyPolicy";
+import TermsAndConditions from "./components/termsAndConditions/TermsAndConditions";
+import ContactUs from "./components/contact/ContactUs"
+import CancellationRefund from "./components/cnacellationRefund/CancellationRefund"
+
 
 const App = () => {
   const { isAuth, user, loading } = UserData();
@@ -150,6 +155,15 @@ const App = () => {
               path="/admin/users"
               element={isAuth ? <AdminUsers user={user} /> : <Login />}
             />
+
+<Route path="/privacy-policy" element={<PrivacyPolicy />} />
+
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+
+            <Route path="/ContactUs" element={<ContactUs/>} />
+
+            <Route path="/CancellationRefund" element={<CancellationRefund />} />
+
           </Routes>
           <Footer />
         </BrowserRouter>
