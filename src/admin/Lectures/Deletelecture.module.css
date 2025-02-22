@@ -1,0 +1,41 @@
+.container {
+    max-width: 600px;
+    margin: auto;
+    margin-top: 100px;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .lectureList {
+    margin-top: 20px;
+  }
+  
+  .lectureItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  .deleteButton {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .deleteButton:hover {
+    background-color: darkred;
+  }
+  

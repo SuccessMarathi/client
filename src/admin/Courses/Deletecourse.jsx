@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import styles from "./Packages.module.css";
-import { server } from "../../index"; // Ensure this is correctly set
-
-import qrCode from "../../Assets/akashQR.jpg"; // QR Code Image
+import styles from "../../pages/packages/Packages.module.css";
+import { server } from "../../index";
+import qrCode from "../../Assets/akashQR.jpg"; 
 
 const Packages = () => {
-  const [packages, setPackages] = useState([]); // Store API response
+  const [packages, setPackages] = useState([]); 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [hoveredPackage, setHoveredPackage] = useState(null); // Track hovered package
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,12 +17,11 @@ const Packages = () => {
     referral: "",
   });
 
-  // ✅ Fetch all courses when the component mounts
   useEffect(() => {
     const fetchPackages = async () => {
       try {
         const response = await axios.get(`${server}/api/getAllCourses`);
-        setPackages(response.data.course); // Store the course data in state
+        setPackages(response.data.course);
       } catch (error) {
         console.error("Error fetching packages:", error);
       }
@@ -45,10 +44,35 @@ const Packages = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleDelete = async (packageId) => {
+    if (!window.confirm("Are you sure you want to delete this package?")) {
+      return;
+    }
+
+    try {
+      const response = await axios.delete(
+        `${server}/api/course/${packageId}`,
+        {
+          headers: {
+            token: localStorage.getItem("token"), 
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        alert("Package deleted successfully!");
+        setPackages(packages.filter((pkg) => pkg._id !== packageId)); 
+      } else {
+        alert("Failed to delete package.");
+      }
+    } catch (error) {
+      console.error("Error deleting package:", error);
+      alert("An error occurred while deleting the package.");
+    }
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-  
-    console.log("Selected Package on Submit:", selectedPackage);
   
     if (!selectedPackage || !selectedPackage._id) {
       alert("Error: No package selected!");
@@ -65,18 +89,10 @@ const Packages = () => {
     setLoading(true);
   
     try {
-      console.log("Sending Request Data:", {
-        courseId: selectedPackage._id,
-        name,
-        email,
-        transactionId,
-        referralId: referral,
-      });
-  
       const response = await axios.post(
         `${server}/api/course/purchase`,
         {
-          courseId: selectedPackage._id,  // Ensure this is NOT undefined
+          courseId: selectedPackage._id,
           name,
           email,
           transactionId,
@@ -88,8 +104,6 @@ const Packages = () => {
           },
         }
       );
-  
-      console.log("Server Response:", response.data);
   
       if (response.status === 200) {
         alert("Payment successful! Course added to your account.");
@@ -113,9 +127,14 @@ const Packages = () => {
       <div className={styles.cardContainer}>
         {packages.length > 0 ? (
           packages.map((pkg) => (
-            <div className={styles.card} key={pkg._id}>
+            <div
+              className={styles.card}
+              key={pkg._id}
+              onMouseEnter={() => setHoveredPackage(pkg._id)}
+              onMouseLeave={() => setHoveredPackage(null)}
+            >
               <img
-                src={`${server}/${pkg.image}`} // Dynamically load images
+                src={`${server}/${pkg.image}`}
                 alt={pkg.name}
                 className={styles.image}
               />
@@ -128,6 +147,15 @@ const Packages = () => {
               >
                 Buy Now
               </button>
+
+              {hoveredPackage === pkg._id && (
+                <button
+                  className={styles.deleteButton}
+                  onClick={() => handleDelete(pkg._id)}
+                >
+                  Delete
+                </button>
+              )}
             </div>
           ))
         ) : (
@@ -201,7 +229,6 @@ const Packages = () => {
 };
 
 export default Packages;
-
 
 
 

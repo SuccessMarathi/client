@@ -4,7 +4,7 @@ import App from "./App.jsx";
 import { UserContextProvider } from "./context/UserContext.jsx";
 import { CourseContextProvider } from "./context/CourseContext.jsx";
 
-export const server = "https://website-server-1-0hpk.onrender.com";
+export const server = "https://newdeploysuccessmarathi.onrender.com";
 //https://website-server-1-0hpk.onrender.com
 
 ReactDOM.createRoot(document.getElementById("root")).render(

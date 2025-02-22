@@ -41,26 +41,32 @@ const MyCourses = () => {
 
   return (
     <div className={styles.myCourses}>
-      <h1 className={styles.title}>My Courses</h1>
-      {courses.length > 0 ? (
-        <div className={styles.courseList}>
-          {courses.map((course) => (
-            <div key={course.courseId} className={styles.courseCard}>
+    <h1 className={styles.title}>My Courses</h1>
+    {courses.length > 0 ? (
+      <div className={styles.courseList}>
+        {courses.map((course) => {
+          const imageUrl = `${server}/${course.image.replace(/\\/g, "/")}`;
+
+          return (
+            <div key={course._id} className={styles.courseCard}>
+              <img className={styles.courseImage} src={imageUrl} alt={course.name} />
               <h2 className={styles.courseName}>{course.name}</h2>
+              <p>{course.description}</p>
               <button
-                onClick={() => handleStartLearning(course.courseId)}
+                onClick={() => handleStartLearning(course._id)}
                 className={styles.startLearningBtn}
               >
                 Start Learning
               </button>
             </div>
-          ))}
-        </div>
-      ) : (
-        <p className={styles.noCourses}>You have not purchased any courses yet.</p>
-      )}
-    </div>
-  );
+          );
+        })}
+      </div>
+    ) : (
+      <p className={styles.noCourses}>You have not purchased any courses yet.</p>
+    )}
+  </div>
+);
 };
 
 export default MyCourses;
