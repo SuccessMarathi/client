@@ -19,7 +19,7 @@ function Footer() {
           <Link to="/ContactUs" className="footerLink">Contact Us</Link>
 
         </div>
-        <p className="owner">© 2024 Akash Rathod. All Rights Reserved.</p>
+        <p className="owner">© 2025 Akash Rathod. All Rights Reserved.</p>
       </div>
     </footer>
   );
