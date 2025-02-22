@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import axios from "axios";
 import { server } from "../../index.js";
-import './Admincourses.css';
+import './admincourses.css';
+
 const AdminCourses = () => {
   const [formData, setFormData] = useState({
     name: "",
