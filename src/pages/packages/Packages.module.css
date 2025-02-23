@@ -177,3 +177,22 @@
     background-color: darkred;
   }
   
+  /* @media (min-width: 768px) { 
+    .deleteButton {
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+  
+    .parentContainer:hover .deleteButton {
+      opacity: 1; 
+    }
+  }
+   */
+  @media (max-width: 767px) { /* Mobile screens */
+    .deleteButton {
+      opacity: 1 !important; /* Always visible */
+    }
+  }
+  
+  
+  

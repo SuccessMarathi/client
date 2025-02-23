@@ -7,14 +7,6 @@ const MyAffiliates = () => {
   const [affiliates, setAffiliates] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Map course IDs to course names
-  const courseNames = {
-    1: "Silver",
-    2: "Gold",
-    3: "Diamond",
-    4: "Platinum",
-  };
-
   useEffect(() => {
     const fetchAffiliates = async () => {
       try {
@@ -23,12 +15,24 @@ const MyAffiliates = () => {
           headers: { token },
         });
 
-        // Transform the data to prioritize highest course ID
+        // Define course names within the function
+        const courseNames = {
+          "67b81fdeb7e36f5e02b649cd": "Beginner",
+          "67b82012b7e36f5e02b649cf": "Elite",
+          "67b82046b7e36f5e02b649d1": "Silver",
+          "67b8206eb7e36f5e02b649d3": "Gold",
+          "67b82092b7e36f5e02b649d5": "Diamond",
+          "67b820b1b7e36f5e02b649d7": "Platinum",
+
+        };
+
+        // Transform the data safely
         const transformedAffiliates = data.affiliates.map((affiliate) => {
-          const highestCourseId = Math.max(...affiliate.purchasedCourses.map(Number));
+          const courses = affiliate.purchasedCourses || []; // Handle missing `purchasedCourses`
+          const highestCourseId = courses.length > 0 ? courses[courses.length - 1] : null;
           return {
             ...affiliate,
-            courseName: courseNames[highestCourseId] || "Unknown Package",
+            courseName: highestCourseId ? courseNames[highestCourseId] || "Unknown Package" : "No Package",
           };
         });
 

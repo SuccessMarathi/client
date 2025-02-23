@@ -11,6 +11,7 @@
   .container h1 {
     align-self: center;
     text-align: center;
+    margin-top: 50px;
   }
   
   .table {

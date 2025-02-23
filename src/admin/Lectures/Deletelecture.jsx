@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FaTrash } from "react-icons/fa";
+// import { FaTrash } from "react-icons/fa";
 import styles from "./Deletelecture.module.css";
 import { server } from "../../index";
 
@@ -126,22 +126,22 @@ const DeleteCourse = () => {
           <h3>Lectures for Selected Course</h3>
           <ul>
           {lectures.map((lecture) => (
-            <li key={lecture._id}>
-              <p>{lecture.title || "Lecture Video"}</p>
-              
-              {/* Show Video */}
-              <iframe
-                width="560"
-                height="315"
-                src={lecture.video}
-                title="Lecture Video"
-                frameBorder="0"
-                allowFullScreen
-              ></iframe>
-
-              {/* Delete Button */}
-              <button onClick={() => handleDeleteLecture(lecture._id)}>Delete</button>
-            </li>
+           <li key={lecture._id}>
+           <p>{lecture.title || "Lecture Video"}</p>
+         
+           {/* Responsive Video Container */}
+           <div className={styles.videoContainer}>
+             <iframe
+               src={lecture.video}
+               title="Lecture Video"
+               frameBorder="0"
+               allowFullScreen
+             ></iframe>
+           </div>
+         
+           <button className="deleteButton" onClick={() => handleDeleteLecture(lecture._id)} style={{"marginTop":"10px"}}>Delete</button>
+         </li>
+         
           ))}
         </ul>
         </div>
