@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { server } from "../../index.js";
 import styles from "./Dashboard.module.css";
@@ -7,12 +7,12 @@ import { GiReceiveMoney, GiTakeMyMoney, GiOpenTreasureChest } from "react-icons/
 import blank from './default.png';
 
 const courseNames = {
-  "1": "Beginner",
-  "2": "Elite",
-  "3": "Silver",
-  "4": "Gold",
-  "5": "Diamond",
-  "6": "Platinum"
+  "67b81fdeb7e36f5e02b649cd": "Beginner",
+  "67b82012b7e36f5e02b649cf": "Elite",
+  "67b82046b7e36f5e02b649d1": "Silver",
+  "67b8206eb7e36f5e02b649d3": "Gold",
+  "67b82092b7e36f5e02b649d5": "Diamond",
+  "67b820b1b7e36f5e02b649d7": "Platinum",
 };
 
 const Dashboard = () => {
@@ -67,7 +67,7 @@ const Dashboard = () => {
           </div>
         )}
         <div className={styles.above}>
-          <img 
+          <img
             src={profileImage || blank}
             alt="User Profile"
             className={styles.profileImage}
