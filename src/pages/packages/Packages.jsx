@@ -88,8 +88,24 @@ const Packages = () => {
           },
         }
       );
+
+     // const response = await axios.post(
+        //         `${server}/api/course/purchase`,
+        //         {
+        //           courseId: selectedPackage.id,
+        //           name,
+        //           email,
+        //           transactionId,
+        //           referralId: referral, // Optional field
+        //         },
+        //         {
+        //           headers: {
+        //             token: localStorage.getItem("token"),
+        //           },
+        //         }
+        //       );
   
-      console.log("Server Response:", response.data);
+     // console.log("Server Response:", response.data);
   
       if (response.status === 200) {
         alert("Payment successful! Course added to your account.");
