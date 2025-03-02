@@ -86,7 +86,7 @@ const Packages = () => {
         key: "rzp_live_d8KSUaJfBVhSUg", // Replace with actual Razorpay Key
         amount: selectedPackage.price * 100,
         currency: "INR",
-        name: "Your Company Name",
+        name: "SuccessMarathi",
         description: selectedPackage.name,
         order_id: data.orderId, // ✅ Use correct orderId from response
         handler: async (response) => {
