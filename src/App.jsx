@@ -36,10 +36,9 @@ import UpdateProfile from "./pages/updateProfile/UpdateProfile";
 import PrivacyPolicy from "./components/privacyPolicy/PrivacyPolicy";
 import TermsAndConditions from "./components/termsAndConditions/TermsAndConditions";
 import ContactUs from "./components/contact/ContactUs"
-import CancellationRefund from "./components/cnacellationRefund/CancellationRefund";
-import AddLectures from "./admin/Lectures/Addlecture";
-import Deletecourse from "./admin/Courses/Deletecourse";
-import Deletelecture from "./admin/Lectures/Deletelecture";
+import CancellationRefund from "./components/cnacellationRefund/CancellationRefund"
+
+import Slider from "./components/slider/Slider";
 
 
 const App = () => {
@@ -122,6 +121,7 @@ const App = () => {
 
 
 
+
             <Route
               path="/payment-success/:id"
               element={isAuth ? <PaymentSuccess user={user} /> : <Login />}
@@ -154,18 +154,6 @@ const App = () => {
               element={isAuth ? <AdminCourses user={user} /> : <Login />}
             />
             <Route
-              path="/admin/delete"
-              element={isAuth ? <Deletecourse user={user} /> : <Login />}
-            />
-          <Route
-              path="/admin/lecture"
-              element={isAuth ? <AddLectures user={user} /> : <Login />}
-            />
-           <Route
-              path="/admin/lecturedelete"
-                element={isAuth ? <Deletelecture user={user} /> : <Login />}
-              />
-            <Route
               path="/admin/users"
               element={isAuth ? <AdminUsers user={user} /> : <Login />}
             />
@@ -180,6 +168,7 @@ const App = () => {
 
           </Routes>
           <Footer />
+        
         </BrowserRouter>
       )}
     </>
