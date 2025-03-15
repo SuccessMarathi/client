@@ -320,8 +320,9 @@
 
   /* Amount and Label Font Size */
   .amount {
-    font-size: 14px;
+    font-size: 20px;
     color: white;
+    font-weight: 800;
   }
 
   .label {
