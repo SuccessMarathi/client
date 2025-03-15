@@ -1,4 +1,4 @@
-.dashboard {
+/* .dashboard {
   padding: 20px;
   max-width: 600px;
   margin: auto;
@@ -99,7 +99,7 @@
   color: #6a44fe;
 }
 
-/* --------- Responsive Design for Mobile Screens --------- */
+
 @media (max-width: 600px) {
   .dashboard {
     padding: 15px;
@@ -149,4 +149,244 @@
   .earnRight {
     font-size: 1.8rem;
   }
+} */
+/* Main Dashboard Container */
+.dashboard {
+  box-sizing: border-box;
+  padding: 20px;
+  background-color: #f5f5f5;
+  margin-top: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px; /* Increased width */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Profile Card - Full Width and Centered */
+.profileCard {
+  width: 100%;
+  max-width: 1200px; /* Increased width */
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease-in-out;
+  background: white;
+  height: 200px; /* Default height for large screens */
+  text-align: center;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+/* Profile Image */
+.profileImage {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  /* object-fit: cover; */
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Profile Details */
+.profileDetails {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  /* align-items: left; */
+}
+
+/* User Name */
+.userName {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Package Label */
+.packageLabel {
+  background: #e85612;
+  color: white;
+  font-size: 18px;
+  padding: 9px 12px;
+  border-radius: 5px;
+  margin-top: 3px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+/* Earnings Grid - 2 Cards Per Row on Large Screens, 1 Card on Mobile */
+.earningsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
+  gap: 20px; /* Increased spacing */
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px; /* Increased width */
+}
+
+/* Earnings Card */
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease-in-out;
+  background: white;
+  height: 110px; /* Default height */
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Amount and Label */
+.earningText {
+  display: flex;
+  flex-direction: column;
+}
+
+.amount {
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+}
+
+.label {
+  font-size: 18px;
+  opacity: 0.9;
+  margin-top: 1px;
+}
+
+/* Icon */
+.icon {
+  background: white;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.icon svg {
+  color: #0099f7;
+  font-size: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  /* Profile Card Height on Mobile */
+  .profileCard {
+    height: 127px;
+    padding: 10px;
+    width: calc(100% - 0px);
+  }
+
+  /* Profile Image Size */
+  .profileImage {
+    width: 100px;
+    height: 100px;
+  }
+
+  /* User Name Font Size */
+  .userName {
+    font-size: 16px;
+  }
+
+  /* Package Label */
+  .packageLabel {
+    font-size: 12px;
+    padding: 4px 10px;
+    margin-top: 1px;
+  }
+
+  /* Earnings Grid - 1 Card Per Row */
+  .earningsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Dashboard Card Height on Mobile */
+  .card {
+    height: 40px;
+    padding: 26px;
+  }
+
+  /* Amount and Label Font Size */
+  .amount {
+    font-size: 14px;
+    color: white;
+  }
+
+  .label {
+    font-size: 12px;
+  }
+
+  /* Icon Size */
+  .icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .icon svg {
+    font-size: 18px;
+  }
+}
+
+/* Colors for Earnings Cards */
+.today {
+  background: linear-gradient(135deg, #e100ff, #7f00ff);
+  color: white;
+}
+
+.weekly {
+  /* background: linear-gradient(135deg, #0027ff, #0052d4); */
+  background: linear-gradient(135deg, #0047ab, #001f8b);
+  color: white;
+}
+
+.monthly {
+  background: linear-gradient(135deg, #d00000, #8b0000);
+  color: white;
+}
+
+.total {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color: white;
+}
+
+/* Animation  */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.earningbox {
+  animation: slideUp 0.8s ease-in-out forwards;
+  opacity: 0; /* Initially hidden */
+}
+
+/* Apply delay for staggered effect */
+.earningbox:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.earningbox:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.earningbox:nth-child(3) {
+  animation-delay: 0.6s;
+}
+.earningbox:nth-child(4) {
+  animation-delay: 0.8s;
 }

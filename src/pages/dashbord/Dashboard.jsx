@@ -4,7 +4,7 @@ import { server } from "../../index.js";
 import styles from "./Dashboard.module.css";
 import { TbMoneybag } from "react-icons/tb";
 import { GiReceiveMoney, GiTakeMyMoney, GiOpenTreasureChest } from "react-icons/gi";
-import blank from './default.png';
+import blank from "./default.png";
 
 const courseNames = {
   "67b81fdeb7e36f5e02b649cd": "Beginner",
@@ -18,14 +18,13 @@ const courseNames = {
 const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
+  const [amounts, setAmounts] = useState([0, 0, 0, 0]);
 
   useEffect(() => {
     async function fetchUser() {
       try {
         const { data } = await axios.get(`${server}/api/user/me`, {
-          headers: {
-            token: localStorage.getItem("token"),
-          },
+          headers: { token: localStorage.getItem("token") },
         });
         setUser(data.user);
       } catch (error) {
@@ -36,9 +35,7 @@ const Dashboard = () => {
     async function fetchProfileImage() {
       try {
         const { data } = await axios.get(`${server}/api/profile-image`, {
-          headers: {
-            token: localStorage.getItem("token"),
-          },
+          headers: { token: localStorage.getItem("token") },
         });
         setProfileImage(data.profileImage);
       } catch (error) {
@@ -50,6 +47,34 @@ const Dashboard = () => {
     fetchProfileImage();
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      const earnings = [
+        user.earnings.today || 0,
+        user.earnings.week || 0,
+        user.earnings.month || 0,
+        user.earnings.total || 0,
+      ];
+
+      earnings.forEach((value, index) => {
+        let current = 0;
+        const increment = Math.ceil(value / 100);
+        const interval = setInterval(() => {
+          current += increment;
+          if (current >= value) {
+            current = value;
+            clearInterval(interval);
+          }
+          setAmounts((prev) => {
+            const newAmounts = [...prev];
+            newAmounts[index] = current;
+            return newAmounts;
+          });
+        }, 10);
+      });
+    }
+  }, [user]);
+
   if (!user) {
     return <div>Loading...</div>;
   }
@@ -60,62 +85,35 @@ const Dashboard = () => {
 
   return (
     <div className={styles.dashboard}>
-      <div className={styles.userInfo}>
-        {highestCourse && (
-          <div className={styles.courseLabel}>
-            {courseNames[highestCourse]}
-          </div>
-        )}
-        <div className={styles.above}>
-          <img
-            src={profileImage || blank}
-            alt="User Profile"
-            className={styles.profileImage}
-          />
-          <h1 className={styles.userName}>{user.name}</h1>
+      <h4 style={{ width: "100%", maxWidth: "1200px", margin: "10px 0px" }}>
+        Welcome back, {user.name}!
+      </h4>
+
+      {/* Profile Card */}
+      <div className={styles.profileCard} style={{ background: "rgb(250,241,226)", border: "3px solid #fff" }}>
+        <img src={profileImage || blank} alt="User Profile" className={styles.profileImage} />
+        <div className={styles.profileDetails} style={{ marginTop: "0px", marginBottom: "10px" }}>
+          <h2 className={styles.userName}>{user.name}</h2>
+          {highestCourse && <span className={styles.packageLabel}>{courseNames[highestCourse]} Package</span>}
         </div>
       </div>
 
-      <div className={styles.section}>
-        <div className={styles.earningBox}>
-          <div className={styles.earnLeft}>
-            <p>{Math.round(user.earnings.today || 0)}/-</p>
-            <h4>Today's Earnings</h4>
+      {/* Earnings Grid */}
+      <div className={styles.earningsGrid}>
+        {[
+          { label: "Today's Earning", icon: <TbMoneybag />, className: styles.today },
+          { label: "Weekly Earning", icon: <GiTakeMyMoney />, className: styles.weekly },
+          { label: "Monthly Earning", icon: <GiReceiveMoney />, className: styles.monthly },
+          { label: "All Time Earning", icon: <GiOpenTreasureChest />, className: styles.total },
+        ].map((card, index) => (
+          <div key={index} className={`${styles.card} ${card.className}`}>
+            <div className={styles.earningText}>
+              <p className={styles.amount}>&#8377; {Math.round(amounts[index])} /-</p>
+              <h4 className={styles.label}>{card.label}</h4>
+            </div>
+            <div className={styles.icon}>{card.icon}</div>
           </div>
-          <div className={styles.earnRight}>
-            <TbMoneybag />
-          </div>
-        </div>
-
-        <div className={styles.earningBox}>
-          <div className={styles.earnLeft}>
-            <p>{Math.round(user.earnings.week || 0)}/-</p>
-            <h4>7 Days Earnings</h4>
-          </div>
-          <div className={styles.earnRight}>
-            <GiTakeMyMoney />
-          </div>
-        </div>
-
-        <div className={styles.earningBox}>
-          <div className={styles.earnLeft}>
-            <p>{Math.round(user.earnings.month || 0)}/-</p>
-            <h4>30 Days Earnings</h4>
-          </div>
-          <div className={styles.earnRight}>
-            <GiReceiveMoney />
-          </div>
-        </div>
-
-        <div className={styles.earningBox}>
-          <div className={styles.earnLeft}>
-            <p>{Math.round(user.earnings.total || 0)}/-</p>
-            <h4>Total Earnings</h4>
-          </div>
-          <div className={styles.earnRight}>
-            <GiOpenTreasureChest />
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
