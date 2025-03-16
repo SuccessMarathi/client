@@ -284,26 +284,26 @@
 @media (max-width: 768px) {
   /* Profile Card Height on Mobile */
   .profileCard {
-    height: 127px;
-    padding: 10px;
+    height: 185px;
+    padding: 23px;
     width: calc(100% - 0px);
   }
 
   /* Profile Image Size */
   .profileImage {
-    width: 100px;
-    height: 100px;
+    width: 115px;
+    height: 115px;
   }
 
   /* User Name Font Size */
   .userName {
-    font-size: 16px;
+    font-size: 19px;
   }
 
   /* Package Label */
   .packageLabel {
-    font-size: 12px;
-    padding: 4px 10px;
+    font-size: 15px;
+    padding: 6px 10px;
     margin-top: 1px;
   }
 
@@ -314,29 +314,30 @@
 
   /* Dashboard Card Height on Mobile */
   .card {
-    height: 40px;
-    padding: 26px;
+    height: 45px;
+    padding: 37px;
   }
 
   /* Amount and Label Font Size */
   .amount {
-    font-size: 20px;
+    font-size: 30px;
     color: white;
     font-weight: 800;
+    margin: 15px 0;
   }
 
   .label {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   /* Icon Size */
   .icon {
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
   }
 
   .icon svg {
-    font-size: 18px;
+    font-size: 37px;
   }
 }
 
