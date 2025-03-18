@@ -36,9 +36,12 @@ import UpdateProfile from "./pages/updateProfile/UpdateProfile";
 import PrivacyPolicy from "./components/privacyPolicy/PrivacyPolicy";
 import TermsAndConditions from "./components/termsAndConditions/TermsAndConditions";
 import ContactUs from "./components/contact/ContactUs"
-import CancellationRefund from "./components/cnacellationRefund/CancellationRefund"
+import CancellationRefund from "./components/cnacellationRefund/CancellationRefund";
+import SuccessPage from "./components/SuccessPage";
+import FailurePage from "./components/FailurePage";
+import Phonepay from "./admin/phonepay/Phonepay"
 
-import Slider from "./components/slider/Slider";
+// import Slider from "./components/slider/Slider";
 
 
 const App = () => {
@@ -77,47 +80,47 @@ const App = () => {
               element={isAuth ? <CourseDescription user={user} /> : <Login />}
             />
 
-           
-           
+
+
             {/* sfhjkdfhsk */}
 
             <Route
               path="/packages"
-              element={isAuth ? <Packages user={user}/> : <Login />}
+              element={isAuth ? <Packages user={user} /> : <Login />}
             />
-            
-            
+
+
             <Route
               path="/myCourses"
-              element={isAuth ? <MyCourses user={user}/> : <Login />}
+              element={isAuth ? <MyCourses user={user} /> : <Login />}
             />
 
-               
+
             <Route
               path="/course-content/:courseId"
-              element={isAuth ? <CourseContent user={user}/> : <Login />}
+              element={isAuth ? <CourseContent user={user} /> : <Login />}
             />
 
-            
-             <Route
+
+            <Route
               path="/my-affiliates"
-              element={isAuth ? <MyAffiliates user={user}/> : <Login />}
+              element={isAuth ? <MyAffiliates user={user} /> : <Login />}
             />
 
-               
-             <Route
+
+            <Route
               path="/leaderboard"
-              element={isAuth ? <Leaderboard user={user}/> : <Login />}
+              element={isAuth ? <Leaderboard user={user} /> : <Login />}
             />
 
-<Route
+            <Route
               path="/update-profile"
-              element={isAuth ? <UpdateProfile user={user}/> : <Login />}
+              element={isAuth ? <UpdateProfile user={user} /> : <Login />}
             />
 
 
 
-            
+
 
 
 
@@ -153,22 +156,34 @@ const App = () => {
               path="/admin/course"
               element={isAuth ? <AdminCourses user={user} /> : <Login />}
             />
+            {/* phonepay testing route */}
+            <Route
+              path="/admin/phonepay"
+              element={isAuth ? <Phonepay user={user} /> : <Login />}
+            />
+
+
+
             <Route
               path="/admin/users"
               element={isAuth ? <AdminUsers user={user} /> : <Login />}
             />
 
-<Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
 
-            <Route path="/ContactUs" element={<ContactUs/>} />
+            <Route path="/ContactUs" element={<ContactUs />} />
 
             <Route path="/CancellationRefund" element={<CancellationRefund />} />
+           
+             <Route path="/payment-success" element={<SuccessPage />} />
+             <Route path="/payment-failed" element={<FailurePage />} />
+               
 
           </Routes>
           <Footer />
-        
+
         </BrowserRouter>
       )}
     </>
