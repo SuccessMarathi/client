@@ -10,7 +10,7 @@ const PaymentForm = () => {
         setLoading(true);
         setError('');
         try {
-            const response = await axios.post('https://phonepay-gateway-service.vercel.app/initiate-payment', {
+            const response = await axios.post('https://phonepay-gateway-service.onrender.com/initiate-payment', {
                 amount: amount * 100, // Convert to paise
             });
             setPaymentResponse(response.data);
