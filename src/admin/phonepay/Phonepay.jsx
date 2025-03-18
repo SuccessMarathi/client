@@ -1,18 +1,22 @@
-import React, { useState } from 'react'
-import AuthToken from '../../components/AuthToken'
-import Payment from '../../components/Payment'
+import React from 'react'
+import PaymentForm from '../../components/PaymentForm';
+import PaymentStatus from '../../components/PaymentStatus';
+
 const Phonepay = () => {
-  const [token, setToken] = useState("");
+  
   return (
     <div>Phonepay
 
-<div>
-                <h1 className="text-center text-3xl font-bold mt-6">PhonePe Payment Integration</h1>
-                <AuthToken setToken={setToken} />
-                <Payment token={token} />
-
-              
-            </div>
+      <div>
+        <h1 className="text-center text-3xl font-bold mt-6" style={{marginTop:"70px"}}>PhonePe Payment Integration</h1>
+      
+        <div style={{ padding: '20px' }}>
+            <h1>PhonePe Payment Gateway Integration</h1>
+            <PaymentForm />
+            <hr />
+            <PaymentStatus />
+        </div>
+      </div>
     </div>
   )
 }
