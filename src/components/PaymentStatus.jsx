@@ -10,7 +10,7 @@ const PaymentStatus = () => {
       setLoading(true);
       setError('');
       try {
-          const response = await axios.get(`https://phonepay-integration-backend.vercel.app/order-status/${orderId}`);
+          const response = await axios.get(`https://phonepay-gateway-service.vercel.app/order-status/${orderId}`);
           setStatus(response.data);
       } catch (err) {
           setError('Failed to fetch payment status.');
