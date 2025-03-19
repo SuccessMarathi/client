@@ -1,21 +1,56 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Replace useHistory with useNavigate
 
 const SuccessPage = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
-    return (
-        <div className="text-center mt-10">
-            <h2 className="text-green-500 text-2xl font-bold">Payment Successful! ✅</h2>
-            <p className="mt-2">Thank you for your payment.</p>
-            <button 
-                className="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
-                onClick={() => navigate("/")}
-            >
-                Go to Home
-            </button>
-        </div>
-    );
+  // Redirect to home after 5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigate("/"); // Redirect to the home page
+    }, 5000); // 5 seconds delay
+
+    return () => clearTimeout(timer); // Cleanup timer
+  }, [navigate]);
+
+  return (
+    <div style={styles.container}>
+      <h2 style={styles.heading}>Payment Successful!</h2>
+      <p style={styles.message}>
+        Thank you for your payment. Your transaction was completed successfully.
+      </p>
+      <p style={styles.redirectMessage}>
+        You will be redirected to the home page shortly...
+      </p>
+    </div>
+  );
+};
+
+const styles = {
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100vh",
+    backgroundColor: "#f0f8ff",
+    padding: "20px",
+    textAlign: "center",
+  },
+  heading: {
+    fontSize: "2rem",
+    color: "#4CAF50",
+    marginBottom: "20px",
+  },
+  message: {
+    fontSize: "1.2rem",
+    color: "#333",
+    marginBottom: "10px",
+  },
+  redirectMessage: {
+    fontSize: "1rem",
+    color: "#666",
+  },
 };
 
 export default SuccessPage;
