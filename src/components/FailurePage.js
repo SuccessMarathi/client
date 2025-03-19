@@ -7,7 +7,7 @@ const FailurePage = () => {
   // Redirect to home after 5 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/admin/phonepay"); // Redirect to the home page
+      navigate("/packages"); // Redirect to the home page
     }, 5000); // 5 seconds delay
 
     return () => clearTimeout(timer); // Cleanup timer
