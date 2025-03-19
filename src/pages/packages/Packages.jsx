@@ -318,13 +318,13 @@ const Packages = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Add token if required
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
   
       console.log("Purchase response:", verifyRes.data);
-      
+  
       if (verifyRes.data.success) {
         // Initiate PhonePe payment
         const response = await axios.post(
@@ -337,19 +337,19 @@ const Packages = () => {
         if (response.data.success && response.data.data.redirectUrl) {
           window.location.href = response.data.data.redirectUrl;
         } else {
+          console.error("Payment initiation failed:", response.data);
           alert("Failed to initiate payment. Please try again.");
         }
       } else {
         alert("Purchase verification failed: " + verifyRes.data.message);
       }
     } catch (error) {
-      console.error("Payment initiation error:", error);
+      console.error("Payment initiation error:", error.response?.data || error.message);
       alert("Payment initiation failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <section className={styles.packages}>
       <h2 className={styles.heading}>Our Packages</h2>
