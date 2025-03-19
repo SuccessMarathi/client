@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const PaymentForm = () => {
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   const handlePayment = async () => {
     setLoading(true);
@@ -20,17 +18,15 @@ const PaymentForm = () => {
     }
 
     try {
+      // Call the backend to initiate payment
       const response = await axios.post(
         "https://phonepay-gateway-service.onrender.com/initiate-payment",
         { amount }
       );
 
+      // Redirect to the PhonePe payment page
       if (response.data.data.redirectUrl) {
-        // Redirect to PhonePe payment page
         window.location.href = response.data.data.redirectUrl;
-      } else if (response.data.data.merchantOrderId) {
-        // Redirect to payment status page with order ID
-        navigate(`/payment-status/${response.data.data.merchantOrderId}`);
       }
     } catch (err) {
       setError("Payment initiation failed. Please try again.");
@@ -87,6 +83,18 @@ const styles = {
 
 export default PaymentForm;
 
+//         <div>
+//           <h3>Payment Response</h3>
+//           <pre>{JSON.stringify(paymentResponse, null, 2)}</pre>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default PaymentForm;
+
+
 // import React, { useState } from 'react';
 // import axios from 'axios';
 
@@ -142,14 +150,3 @@ export default PaymentForm;
 //       </button>
 //       {error && <p style={{ color: 'red' }}>{error}</p>}
 //       {paymentResponse && (
-//         <div>
-//           <h3>Payment Response</h3>
-//           <pre>{JSON.stringify(paymentResponse, null, 2)}</pre>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default PaymentForm;
-
