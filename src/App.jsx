@@ -162,11 +162,18 @@ const App = () => {
               path="/admin/phonepay"
               element={isAuth ? <Phonepay user={user} /> : <Login />}
             />
- <Route path="/payment-status/:orderId" element={<PaymentStatus />} />
-            <Route path="/success" component={SuccessPage} />
-            <Route path="/failure" component={FailurePage} />
-
-
+            <Route
+              path="/success"
+              element={isAuth ? <SuccessPage user={user} /> : <Login />}
+            />
+             <Route
+              path="/failure"
+              element={isAuth ? <FailurePage user={user} /> : <Login />}
+            />
+             <Route
+              path="/payment-status/:orderId"
+              element={isAuth ? <PaymentStatus user={user} /> : <Login />}
+            />
             <Route
               path="/admin/users"
               element={isAuth ? <AdminUsers user={user} /> : <Login />}
