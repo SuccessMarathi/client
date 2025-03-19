@@ -1,20 +1,121 @@
 
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import styles from "./Packages.module.css"; // Assuming you're still using this stylesheet
+// import { server } from "../../index"; 
+
+// const Packages = () => {
+//   const [packages, setPackages] = useState([]); // Store API response
+//   const [loadingPackage, setLoadingPackage] = useState(null); // Track loading state for each package
+//   const [error, setError] = useState("");
+
+//   // Fetch all packages on component mount
+//   useEffect(() => {
+//     const fetchPackages = async () => {
+//       try {
+//         const response = await axios.get(`${server}/api/getAllCourses`);
+//         setPackages(response.data.course); // Store the course data in state
+//       } catch (error) {
+//         console.error("Error fetching packages:", error);
+//       }
+//     };
+
+//     fetchPackages();
+//   }, []);
+
+//   // Handle payment initiation for a specific package
+//   const handlePayment = async (pkg) => {
+//     setLoadingPackage(pkg._id); // Set the loading state for the specific package
+//     setError("");
+
+//     // Validate package price
+//     if (!pkg.price || pkg.price <= 0) {
+//       setError("Invalid price. Please check the package price.");
+//       setLoadingPackage(null); // Reset loading state
+//       return;
+//     }
+
+//     try {
+//       // Send the package price to the backend to initiate the payment
+//       const response = await axios.post(
+//         "https://phonepay-gateway-service.onrender.com/initiate-payment",
+//         { amount: pkg.price } // Send the package price in INR
+//       );
+
+//       console.log("Payment initiation response:", response.data);
+
+//       if (response.data.success && response.data.data.redirectUrl) {
+//         // Redirect to the payment page if a redirect URL is returned
+//         window.location.href = response.data.data.redirectUrl;
+//       } else {
+//         setError("Failed to initiate payment. Please try again.");
+//       }
+//     } catch (err) {
+//       setError("Payment initiation failed. Please try again.");
+//       console.error("Error initiating payment:", err);
+//     } finally {
+//       setLoadingPackage(null); // Reset loading state after the process
+//     }
+//   };
+
+//   return (
+//     <section className={styles.packages}>
+//       <h2 className={styles.heading}>Our Packages</h2>
+
+//       <div className={styles.cardContainer}>
+//         {packages.length > 0 ? (
+//           packages.map((pkg) => (
+//             <div className={styles.card} key={pkg._id}>
+//               <img
+//                 src={`${server}/${pkg.image}`} // Dynamically load images
+//                 alt={pkg.name}
+//                 className={styles.image}
+//               />
+//               <h3 className={styles.title}>{pkg.name}</h3>
+//               <p className={styles.price}>₹{pkg.price}/-</p>
+//               <p className={styles.description}>{pkg.description}</p>
+//               <button
+//                 className={styles.buyNowButton}
+//                 onClick={() => handlePayment(pkg)} // Trigger payment for this specific package
+//                 disabled={loadingPackage === pkg._id} // Disable the button if the current package is being processed
+//               >
+//                 {loadingPackage === pkg._id ? "Processing..." : "Buy Now"}
+//               </button>
+//             </div>
+//           ))
+//         ) : (
+//           <p>Loading packages...</p>
+//         )}
+//       </div>
+
+//       {error && <p style={{ color: "red" }}>{error}</p>} {/* Show any errors */}
+//     </section>
+//   );
+// };
+
+// export default Packages;
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import styles from "./Packages.module.css"; // Assuming you're still using this stylesheet
-import { server } from "../../index"; 
+import styles from "./Packages.module.css";
+import { server } from "../../index";
 
 const Packages = () => {
-  const [packages, setPackages] = useState([]); // Store API response
-  const [loadingPackage, setLoadingPackage] = useState(null); // Track loading state for each package
-  const [error, setError] = useState("");
+  const [packages, setPackages] = useState([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    referral: "",
+  });
 
-  // Fetch all packages on component mount
   useEffect(() => {
     const fetchPackages = async () => {
       try {
         const response = await axios.get(`${server}/api/getAllCourses`);
-        setPackages(response.data.course); // Store the course data in state
+        setPackages(response.data.course);
       } catch (error) {
         console.error("Error fetching packages:", error);
       }
@@ -23,38 +124,46 @@ const Packages = () => {
     fetchPackages();
   }, []);
 
-  // Handle payment initiation for a specific package
-  const handlePayment = async (pkg) => {
-    setLoadingPackage(pkg._id); // Set the loading state for the specific package
-    setError("");
+  const openPopup = (pkg) => {
+    setSelectedPackage(pkg);
+    setIsPopupOpen(true);
+  };
 
-    // Validate package price
-    if (!pkg.price || pkg.price <= 0) {
-      setError("Invalid price. Please check the package price.");
-      setLoadingPackage(null); // Reset loading state
+  const closePopup = () => {
+    setIsPopupOpen(false);
+    setSelectedPackage(null);
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handlePayment = async (e) => {
+    e.preventDefault();
+    if (!selectedPackage) {
+      alert("Error: No package selected!");
       return;
     }
 
+    setLoading(true);
     try {
-      // Send the package price to the backend to initiate the payment
       const response = await axios.post(
         "https://phonepay-gateway-service.onrender.com/initiate-payment",
-        { amount: pkg.price } // Send the package price in INR
+        { amount: selectedPackage.price }
       );
 
       console.log("Payment initiation response:", response.data);
 
       if (response.data.success && response.data.data.redirectUrl) {
-        // Redirect to the payment page if a redirect URL is returned
         window.location.href = response.data.data.redirectUrl;
       } else {
-        setError("Failed to initiate payment. Please try again.");
+        alert("Failed to initiate payment. Please try again.");
       }
-    } catch (err) {
-      setError("Payment initiation failed. Please try again.");
-      console.error("Error initiating payment:", err);
+    } catch (error) {
+      console.error("Payment initiation error:", error);
+      alert("Payment initiation failed. Please try again.");
     } finally {
-      setLoadingPackage(null); // Reset loading state after the process
+      setLoading(false);
     }
   };
 
@@ -67,7 +176,7 @@ const Packages = () => {
           packages.map((pkg) => (
             <div className={styles.card} key={pkg._id}>
               <img
-                src={`${server}/${pkg.image}`} // Dynamically load images
+                src={`${server}/${pkg.image}`}
                 alt={pkg.name}
                 className={styles.image}
               />
@@ -76,10 +185,9 @@ const Packages = () => {
               <p className={styles.description}>{pkg.description}</p>
               <button
                 className={styles.buyNowButton}
-                onClick={() => handlePayment(pkg)} // Trigger payment for this specific package
-                disabled={loadingPackage === pkg._id} // Disable the button if the current package is being processed
+                onClick={() => openPopup(pkg)}
               >
-                {loadingPackage === pkg._id ? "Processing..." : "Buy Now"}
+                Buy Now
               </button>
             </div>
           ))
@@ -88,13 +196,62 @@ const Packages = () => {
         )}
       </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>} {/* Show any errors */}
+      {isPopupOpen && (
+        <div className={styles.popup}>
+          <div className={styles.popupContent}>
+            <button className={styles.closeButton} onClick={closePopup}>
+              &times;
+            </button>
+            <h3 className={styles.popupTitle}>
+              {selectedPackage?.name} - ₹{selectedPackage?.price}
+            </h3>
+            <form onSubmit={handlePayment} className={styles.paymentForm}>
+              <div className={styles.formGroup}>
+                <label>Name:</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label>Email:</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label>Referral Link:</label>
+                <input
+                  type="text"
+                  name="referral"
+                  value={formData.referral}
+                  onChange={handleChange}
+                  placeholder="Enter referral link (if any)"
+                />
+              </div>
+              <button
+                type="submit"
+                className={styles.submitButton}
+                disabled={loading}
+              >
+                {loading ? "Processing..." : "Pay Now"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
 
 export default Packages;
-
 
 
 
