@@ -1,27 +1,27 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState } from 'react';
+import axios from 'axios';
 
 const PaymentForm = () => {
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [paymentResponse, setPaymentResponse] = useState(null);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handlePayment = async () => {
     setLoading(true);
-    setError("");
+    setError('');
 
     // Validate Amount
     if (!amount || amount <= 0) {
-      setError("Please enter a valid amount greater than 0.");
+      setError('Please enter a valid amount greater than 0.');
       setLoading(false);
       return;
     }
 
     try {
       const response = await axios.post(
-        "https://phonepay-gateway-service.onrender.com/initiate-payment",
-        { amount } // Send amount as INR, backend handles conversion
+        'https://phonepay-gateway-service.onrender.com/initiate-payment',
+        { amount } // Send amount in INR, backend will convert to paise
       );
 
       setPaymentResponse(response.data);
@@ -29,8 +29,8 @@ const PaymentForm = () => {
         window.location.href = response.data.data.redirectUrl; // Redirect to PhonePe payment page
       }
     } catch (err) {
-      setError("Payment initiation failed. Please try again.");
-      console.error("Error initiating payment:", err);
+      setError('Payment initiation failed. Please try again.');
+      console.error('Error initiating payment:', err);
     } finally {
       setLoading(false);
     }
@@ -49,9 +49,9 @@ const PaymentForm = () => {
         />
       </div>
       <button onClick={handlePayment} disabled={loading}>
-        {loading ? "Processing..." : "Pay Now"}
+        {loading ? 'Processing...' : 'Pay Now'}
       </button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       {paymentResponse && (
         <div>
           <h3>Payment Response</h3>
@@ -63,8 +63,6 @@ const PaymentForm = () => {
 };
 
 export default PaymentForm;
-
-
 
 
 // import React, { useState } from 'react'
