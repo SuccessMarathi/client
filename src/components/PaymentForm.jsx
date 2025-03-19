@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const PaymentForm = () => {
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handlePayment = async () => {
     setLoading(true);
@@ -17,16 +19,40 @@ const PaymentForm = () => {
       return;
     }
 
+    // try {
+    //   const response = await axios.post(
+    //     "https://phonepay-gateway-service.onrender.com/initiate-payment",
+    //     { amount }
+    //   );
+
+    //   if (response.data.data.redirectUrl) {
+    //     // Redirect to PhonePe payment page
+    //     window.location.href = response.data.data.redirectUrl;
+    //   } else if (response.data.data.merchantOrderId) {
+    //     // Redirect to payment status page with order ID
+    //     navigate(`/payment-status/${response.data.data.merchantOrderId}`);
+    //   }
+    // } catch (err) {
+    //   setError("Payment initiation failed. Please try again.");
+    //   console.error("Error initiating payment:", err);
+    // } finally {
+    //   setLoading(false);
+    // }'
+  
     try {
-      // Call the backend to initiate payment
       const response = await axios.post(
         "https://phonepay-gateway-service.onrender.com/initiate-payment",
         { amount }
       );
-
-      // Redirect to the PhonePe payment page
-      if (response.data.data.redirectUrl) {
+    
+      console.log("Payment initiation response:", response.data);
+    
+      if (response.data.success && response.data.data.redirectUrl) {
         window.location.href = response.data.data.redirectUrl;
+      } else if (response.data.success && response.data.data.merchantOrderId) {
+        navigate(`/payment-status/${response.data.data.merchantOrderId}`);
+      } else {
+        setError("Unexpected response from the payment gateway.");
       }
     } catch (err) {
       setError("Payment initiation failed. Please try again.");
@@ -34,6 +60,8 @@ const PaymentForm = () => {
     } finally {
       setLoading(false);
     }
+    
+  
   };
 
   return (
