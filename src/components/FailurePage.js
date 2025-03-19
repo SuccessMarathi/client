@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Replace useHistory with useNavigate
+import { useNavigate } from "react-router-dom";
 
 const FailurePage = () => {
-  const navigate = useNavigate(); // Use useNavigate instead of useHistory
+  const navigate = useNavigate();
 
   // Redirect to home after 5 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/"); // Redirect to the home page
+      navigate("/admin/phonepay"); // Redirect to the home page
     }, 5000); // 5 seconds delay
 
     return () => clearTimeout(timer); // Cleanup timer
@@ -36,6 +36,7 @@ const styles = {
     backgroundColor: "#fff0f0",
     padding: "20px",
     textAlign: "center",
+    marginTOP: "60px",
   },
   heading: {
     fontSize: "2rem",
