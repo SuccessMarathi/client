@@ -300,29 +300,48 @@ const Packages = () => {
 
   const handlePayment = async (e) => {
     e.preventDefault();
-  
-    if (!selectedPackage || !selectedPackage._id) {
-      alert("Error: No package selected or invalid package data!");
+    if (!selectedPackage) {
+      alert("Error: No package selected!");
       return;
     }
   
     setLoading(true);
     try {
-      console.log("Selected Package before Payment:", selectedPackage);
-  
-      // 1️⃣ Step 1: Initiate payment with PhonePe FIRST
-      const response = await axios.post(
+      // Step 1: Initiate PhonePe payment
+      const paymentResponse = await axios.post(
         "https://phonepay-gateway-service.onrender.com/initiate-payment",
-        { amount: selectedPackage.price }
+        { amount: selectedPackage.price * 100 } // Convert to paise if required
       );
   
-      console.log("Payment initiation response:", response.data);
+      console.log("Payment initiation response:", paymentResponse.data);
   
-      if (response.data.success && response.data.data.redirectUrl) {
-        // Redirect user to PhonePe payment gateway
-        window.location.href = response.data.data.redirectUrl;
+      if (paymentResponse.data.success && paymentResponse.data.data.redirectUrl) {
+        // Step 2: Record the purchase in the backend only if payment initiation is successful
+        const purchaseResponse = await axios.post(
+          `${server}/api/course/purchase`,
+          {
+            courseId: String(selectedPackage._id),
+            name: formData.name,
+            email: formData.email,
+            referralId: formData.referral,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+  
+        console.log("Purchase response:", purchaseResponse.data);
+  
+        if (purchaseResponse.data.success) {
+          // Step 3: Redirect to the payment gateway's URL
+          window.location.href = paymentResponse.data.data.redirectUrl;
+        } else {
+          alert("Failed to record purchase. Please try again.");
+        }
       } else {
-        console.error("Payment initiation failed:", response.data);
+        console.error("Payment initiation failed:", paymentResponse.data);
         alert("Failed to initiate payment. Please try again.");
       }
     } catch (error) {
@@ -332,7 +351,6 @@ const Packages = () => {
       setLoading(false);
     }
   };
-  
   return (
     <section className={styles.packages}>
       <h2 className={styles.heading}>Our Packages</h2>
