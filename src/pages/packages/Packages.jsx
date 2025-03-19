@@ -308,12 +308,20 @@ const Packages = () => {
     setLoading(true);
     try {
       // Send purchase details to backend
-      const verifyRes = await axios.post(`${server}/api/course/purchase`, {
-        courseId: String(selectedPackage._id), // Ensure courseId is a string
-        name: formData.name,
-        email: formData.email,
-        referralId: formData.referral,
-      });
+      const verifyRes = await axios.post(
+        `${server}/api/course/purchase`,
+        {
+          courseId: String(selectedPackage._id),
+          name: formData.name,
+          email: formData.email,
+          referralId: formData.referral,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Add token if required
+          },
+        }
+      );
   
       console.log("Purchase response:", verifyRes.data);
       
