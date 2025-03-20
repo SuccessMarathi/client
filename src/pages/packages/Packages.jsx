@@ -40,28 +40,34 @@ const Packages = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     console.log("Selected Package on Submit:", selectedPackage);
+  
     if (!selectedPackage || !selectedPackage._id) {
       alert("Error: No package selected!");
       return;
     }
+  
     const { name, email, transactionId, referral } = formData;
     if (!name || !email || !transactionId) {
       alert("Please fill in all required fields.");
       return;
     }
+  
     setLoading(true);
+  
     try {
       console.log("Sending Request Data:", {
-        courseId: selectedPackage._id,
+        courseId: selectedPackage._id, // Ensure this is NOT undefined
         name,
         email,
         transactionId,
         referralId: referral,
       });
+  
+      // Step 1: Send request to record the course purchase
       const response = await axios.post(
         `${server}/api/course/purchase`,
         {
-          courseId: selectedPackage._id,  // Ensure this is NOT undefined
+          courseId: selectedPackage._id,
           name,
           email,
           transactionId,
@@ -73,34 +79,36 @@ const Packages = () => {
           },
         }
       );
-      console.log("Server Response:", response.data);
-      if (response.status === 200) {
-       
-          // Step 2: Initiate PhonePe payment only if purchase is successful
-          const paymentResponse = await axios.post(
-            "https://phonepay-gateway-service.onrender.com/initiate-payment",
-            { amount: selectedPackage.price * 100 } // Convert to paise if required
-          );
   
-          if (paymentResponse.data.success && paymentResponse.data.data.redirectUrl) {
-            // Step 3: Redirect to the payment gateway's URL
-            window.location.href = paymentResponse.data.data.redirectUrl;
-          } else {
-            console.error("Payment initiation failed:", paymentResponse.data);
-            alert("Failed to initiate payment. Please try again.");
+      console.log("Server Response:", response.data);
+  
+      if (response.data.success) {
+        // Step 2: If purchase is successful, initiate PhonePe payment
+        const paymentResponse = await axios.post(
+          "https://phonepay-gateway-service.onrender.com/initiate-payment",
+          {
+            amount: selectedPackage.price * 100, // Convert to paise
           }
-        } 
-      
-       else {
+        );
+  
+        if (paymentResponse.data.success && paymentResponse.data.data.redirectUrl) {
+          // Step 3: Redirect to the payment gateway's URL
+          window.location.href = paymentResponse.data.data.redirectUrl;
+        } else {
+          console.error("Payment initiation failed:", paymentResponse.data);
+          alert("Failed to initiate payment. Please try again.");
+        }
+      } else {
         alert("Failed to record purchase. Please try again.");
       }
     } catch (error) {
-      console.error("Error:", error.response ? error.response.data : error);
-      alert("An error occurred while processing the payment.");
+      console.error("Error during the purchase/payment process:", error.response?.data || error.message);
+      alert("An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
   };
+  
   return (
     <section className={styles.packages}>
       <h2 className={styles.heading}>Our Packages</h2>
@@ -528,29 +536,29 @@ export default Packages;
 
 //       console.log("Purchase response:", response.data);
 
-//       if (response.data.success) {
-//         // Step 2: Initiate PhonePe payment only if purchase is successful
-//         const paymentResponse = await axios.post(
-//           "https://phonepay-gateway-service.onrender.com/initiate-payment",
-//           { amount: selectedPackage.price * 100 } // Convert to paise if required
-//         );
+    //   if (response.data.success) {
+    //     // Step 2: Initiate PhonePe payment only if purchase is successful
+    //     const paymentResponse = await axios.post(
+    //       "https://phonepay-gateway-service.onrender.com/initiate-payment",
+    //       { amount: selectedPackage.price * 100 } // Convert to paise if required
+    //     );
 
-//         if (paymentResponse.data.success && paymentResponse.data.data.redirectUrl) {
-//           // Step 3: Redirect to the payment gateway's URL
-//           window.location.href = paymentResponse.data.data.redirectUrl;
-//         } else {
-//           console.error("Payment initiation failed:", paymentResponse.data);
-//           alert("Failed to initiate payment. Please try again.");
-//         }
-//       } else {
-//         alert("Failed to record purchase. Please try again.");
-//       }
-//     } catch (error) {
-//       console.error("Error during the purchase/payment process:", error.response?.data || error.message);
-//       alert("An error occurred. Please try again.");
-//     } finally {
-//       setLoading(false);
-//     }
+    //     if (paymentResponse.data.success && paymentResponse.data.data.redirectUrl) {
+    //       // Step 3: Redirect to the payment gateway's URL
+    //       window.location.href = paymentResponse.data.data.redirectUrl;
+    //     } else {
+    //       console.error("Payment initiation failed:", paymentResponse.data);
+    //       alert("Failed to initiate payment. Please try again.");
+    //     }
+    //   } else {
+    //     alert("Failed to record purchase. Please try again.");
+    //   }
+    // } catch (error) {
+    //   console.error("Error during the purchase/payment process:", error.response?.data || error.message);
+    //   alert("An error occurred. Please try again.");
+    // } finally {
+    //   setLoading(false);
+    // }
 // };
 
 
