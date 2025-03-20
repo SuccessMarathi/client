@@ -187,8 +187,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./Packages.module.css";
 import { server } from "../../index"; // Ensure this is correctly set
-import qrCode from "../../Assets/akashQR.jpg"; // QR Code Image
-import { useNavigate } from "react-router-dom"; // Navigate hook for redirection
+// import qrCode from "../../Assets/akashQR.jpg"; // QR Code Image
+// import { useNavigate } from "react-router-dom"; // Navigate hook for redirection
 
 const Packages = () => {
   const [packages, setPackages] = useState([]);
@@ -199,7 +199,6 @@ const Packages = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    transactionId: "",
     referral: "",
   });
 
@@ -240,8 +239,8 @@ const Packages = () => {
       alert("Error: No package selected!");
       return;
     }
-    const { name, email, transactionId, referral } = formData;
-    if (!name || !email || !transactionId) {
+    const { name, email, referral } = formData;
+    if (!name || !email ) {
       alert("Please fill in all required fields.");
       return;
     }
@@ -250,7 +249,6 @@ const Packages = () => {
     const formDataToStore = {
       name,
       email,
-      transactionId,
       referral,
       courseId: selectedPackage._id,
     };
@@ -366,7 +364,7 @@ return (
             </div>
           ) : (
             <>
-              <img src={qrCode} alt="QR Code" className={styles.qrCode} />
+              {/* <img src={qrCode} alt="QR Code" className={styles.qrCode} /> */}
               <form onSubmit={handleFormSubmit} className={styles.paymentForm}>
                 <div className={styles.formGroup}>
                   <label>Name:</label>
@@ -388,7 +386,7 @@ return (
                     required
                   />
                 </div>
-                <div className={styles.formGroup}>
+                {/* <div className={styles.formGroup}>
                   <label>Transaction ID:</label>
                   <input
                     type="text"
@@ -397,7 +395,7 @@ return (
                     onChange={handleChange}
                     required
                   />
-                </div>
+                </div> */}
                 <div className={styles.formGroup}>
                   <label>Referral ID (Optional):</label>
                   <input

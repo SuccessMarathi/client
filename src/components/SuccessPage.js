@@ -10,7 +10,7 @@ const SuccessPage = () => {
     const formData = JSON.parse(localStorage.getItem("formData"));
 
     if (formData) {
-      const { name, email, transactionId, referral, courseId } = formData;
+      const { name, email, referral, courseId } = formData;
 
       // Call the purchase API
       const purchaseCourse = async () => {
@@ -21,7 +21,6 @@ const SuccessPage = () => {
               courseId,
               name,
               email,
-              transactionId,
               referralId: referral,
             },
             {
