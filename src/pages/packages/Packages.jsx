@@ -408,81 +408,95 @@
 
 // success code end
 
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { server } from '../../index'; // Assuming the server URL is correctly set
-import styles from './Packages.module.css'; // Assuming the correct CSS file
-import qrCode from '../../Assets/akashQR.jpg'; // QR Code Image
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { server } from "../../index"; // Ensure this is correctly set
+import styles from "./Packages.module.css";
+import qrCode from "../../Assets/akashQR.jpg"; // QR Code Image
 
 const Packages = () => {
-  const [packages, setPackages] = useState([]);
+  const [packages, setPackages] = useState([]); // Store API response
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    transactionId: '',
-    referral: '',
-  });
   const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    transactionId: "",
+    referral: "",
+  });
 
-  // Fetch all packages on mount
+  // Fetch all packages when the component mounts
   useEffect(() => {
     const fetchPackages = async () => {
       try {
         const response = await axios.get(`${server}/api/getAllCourses`);
-        setPackages(response.data.course);
+        setPackages(response.data.course); // Store the course data in state
       } catch (error) {
-        console.error('Error fetching packages:', error);
+        console.error("Error fetching packages:", error);
       }
     };
     fetchPackages();
   }, []);
 
+  // Open popup to purchase a course
+  const openPopup = (pkg) => {
+    setSelectedPackage(pkg);
+    setIsPopupOpen(true);
+  };
+
+  // Close the popup
+  const closePopup = () => {
+    setIsPopupOpen(false);
+    setSelectedPackage(null);
+  };
+
+  // Handle form input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     // Check if package is selected
     if (!selectedPackage || !selectedPackage._id) {
-      alert('Error: No package selected!');
+      alert("Error: No package selected!");
       return;
     }
 
-    // Extract form data
     const { name, email, transactionId, referral } = formData;
 
-    // Check if all required fields are filled
+    // Ensure all required fields are filled
     if (!name || !email || !transactionId) {
-      alert('Please fill in all required fields.');
+      alert("Please fill in all required fields.");
       return;
     }
 
     setLoading(true);
 
     try {
-      // Step 1: Check if the user is already enrolled in the selected course
+      // Step 1: Check if the user is already enrolled
       const checkEnrollmentResponse = await axios.get(
         `${server}/api/course/check-enrollment/${selectedPackage._id}`,
         {
           headers: {
-            token: localStorage.getItem('token'), // Assuming JWT token is being used
+            token: localStorage.getItem("token"), // Assuming JWT token is used for auth
           },
         }
       );
 
+      // If user is already enrolled, show alert and don't proceed
       if (checkEnrollmentResponse.data.isEnrolled) {
-        alert('You are already enrolled in this course.');
+        alert("You are already enrolled in this course.");
         setLoading(false);
         return;
       }
 
-      // Step 2: Initiate payment via PhonePay
+      // Step 2: Initiate payment via PhonePay (or your preferred payment gateway)
       const paymentResponse = await axios.post(
-        'https://phonepay-gateway-service.onrender.com/initiate-payment', // Payment gateway URL
+        "https://phonepay-gateway-service.onrender.com/initiate-payment", // Payment gateway URL
         {
           amount: selectedPackage.price, // Payment amount
         }
@@ -495,60 +509,53 @@ const Packages = () => {
           // Step 3: Redirect user to PhonePay payment gateway
           window.location.href = redirectUrl;
         } else {
-          alert('Payment initiation failed. No redirect URL returned.');
+          alert("Payment initiation failed. No redirect URL returned.");
           setLoading(false);
         }
-
-        // After payment is successful (this part depends on your implementation)
-        // Step 4: Once the user returns from the payment gateway, verify payment status
-        const paymentStatusResponse = await checkPaymentStatus(paymentResponse.data.data.merchantOrderId);
-
-        if (paymentStatusResponse.success) {
-          // Step 5: Proceed to add the course to the user's account
-          const purchaseResponse = await axios.post(
-            `${server}/api/course/purchase`,
-            {
-              courseId: selectedPackage._id,
-              name,
-              email,
-              transactionId,
-              referralId: referral,
-            },
-            {
-              headers: {
-                token: localStorage.getItem('token'),
-              },
-            }
-          );
-
-          if (purchaseResponse.status === 200) {
-            alert('Payment successful! Course added to your account.');
-          } else {
-            alert('Course purchase failed. Please try again.');
-          }
-        } else {
-          alert('Payment failed. Please try again.');
-        }
       } else {
-        alert('Payment initiation failed. Please try again.');
+        alert("Payment initiation failed. Please try again.");
+        setLoading(false);
       }
     } catch (error) {
-      console.error('Error during payment or enrollment:', error.response ? error.response.data : error);
-      alert('An error occurred while processing the payment.');
-    } finally {
+      console.error("Error during payment or enrollment:", error.response ? error.response.data : error);
+      alert("An error occurred while processing the payment.");
       setLoading(false);
     }
   };
 
-  const checkPaymentStatus = async (merchantOrderId) => {
-    try {
-      const response = await axios.get(
-        `https://phonepay-gateway-service.onrender.com/payment-status/${merchantOrderId}`
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Error checking payment status:', error);
-      return { success: false };
+  // Handle course purchase after successful payment
+  const handleCoursePurchase = async (paymentStatus, transactionId) => {
+    if (paymentStatus === "success") {
+      try {
+        // Step 4: If payment was successful, add course to user's account
+        const response = await axios.post(
+          `${server}/api/course/purchase`,
+          {
+            courseId: selectedPackage._id,
+            name: formData.name,
+            email: formData.email,
+            transactionId: transactionId,
+            referralId: formData.referral,
+          },
+          {
+            headers: {
+              token: localStorage.getItem("token"),
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          alert("Payment successful! Course added to your account.");
+          closePopup();
+        } else {
+          alert("Course purchase failed. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error purchasing course:", error);
+        alert("An error occurred while adding the course to your account.");
+      }
+    } else {
+      alert("Payment failed. The course will not be added.");
     }
   };
 
@@ -569,7 +576,7 @@ const Packages = () => {
               <p className={styles.description}>{pkg.description}</p>
               <button
                 className={styles.buyNowButton}
-                onClick={() => setSelectedPackage(pkg)}
+                onClick={() => openPopup(pkg)}
               >
                 Buy Now
               </button>
@@ -580,10 +587,10 @@ const Packages = () => {
         )}
       </div>
 
-      {selectedPackage && (
+      {isPopupOpen && (
         <div className={styles.popup}>
           <div className={styles.popupContent}>
-            <button className={styles.closeButton} onClick={() => setSelectedPackage(null)}>
+            <button className={styles.closeButton} onClick={closePopup}>
               &times;
             </button>
             <h3 className={styles.popupTitle}>
@@ -635,7 +642,7 @@ const Packages = () => {
                 className={styles.submitButton}
                 disabled={loading}
               >
-                {loading ? 'Processing...' : 'Submit Payment'}
+                {loading ? "Processing..." : "Submit Payment"}
               </button>
             </form>
           </div>
@@ -646,6 +653,7 @@ const Packages = () => {
 };
 
 export default Packages;
+
 
 
 
