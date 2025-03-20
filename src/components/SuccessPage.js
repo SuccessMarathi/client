@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {useLocation } from "react-router-dom";
 import axios from "axios";
 import { server } from "../index"; 
 const SuccessPage = () => {
@@ -35,10 +34,10 @@ const SuccessPage = () => {
           if (purchaseResponse.status === 200) {
             alert("Payment successful! Course added to your account.");
             localStorage.removeItem("formData"); // Clear stored form data
-            navigate("/account"); // Redirect to the account page
+            navigate("/myCourses"); // Redirect to the account page
           } else {
             alert("Course purchase failed. Please try again.");
-            navigate("/packages"); // Redirect back to packages page
+            navigate("/packagesmyCourses"); // Redirect back to packages page
           }
         } catch (error) {
           console.error("Error during course purchase:", error);
@@ -55,13 +54,17 @@ const SuccessPage = () => {
   }, [navigate]);
 
   return (
-    <div>
-      <h2>Payment Successful!</h2>
-      <p>Redirecting you to your account...</p>
+    <div style={styles.container}>
+      <h2 style={styles.heading}>Payment Successful!</h2>
+      <p style={styles.message}>
+        Thank you for your payment. Your transaction was completed successfully.
+      </p>
+      <p style={styles.redirectMessage}>
+        You will be redirected to the home page shortly...
+      </p>
     </div>
   );
 };
-
 
 const styles = {
   container: {
