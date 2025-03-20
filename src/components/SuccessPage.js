@@ -1,30 +1,65 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import {useLocation } from "react-router-dom";
+import axios from "axios";
+import { server } from "../index"; 
 const SuccessPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Redirect to home after 5 seconds
   useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate("/packages"); // Redirect to the home page
-    }, 5000); // 5 seconds delay
+    const queryParams = new URLSearchParams(location.search);
+    const transactionId = queryParams.get("transaction_id");
+    const courseId = queryParams.get("course_id");
+    const userId = localStorage.getItem("userId");
 
-    return () => clearTimeout(timer); // Cleanup timer
-  }, [navigate]);
+    if (transactionId && courseId && userId) {
+      // Call the purchase API to add the course to the user's account
+      const purchaseCourse = async () => {
+        try {
+          const purchaseResponse = await axios.post(
+            `${server}/api/course/purchase`,
+            {
+              courseId,
+              userId,
+              transactionId,
+            },
+            {
+              headers: {
+                token: localStorage.getItem("token"), // Assuming you are using JWT for authentication
+              },
+            }
+          );
+
+          if (purchaseResponse.status === 200) {
+            alert("Payment successful! Course added to your account.");
+            navigate("/account"); // Redirect to the account page
+          } else {
+            alert("Course purchase failed. Please try again.");
+            navigate("/packages"); // Redirect back to packages page
+          }
+        } catch (error) {
+          console.error("Error during course purchase:", error);
+          alert("An error occurred while processing the payment.");
+          navigate("/packages"); // Redirect back to packages page
+        }
+      };
+
+      purchaseCourse();
+    } else {
+      alert("Invalid payment details. Please try again.");
+      navigate("/packages"); // Redirect back to packages page
+    }
+  }, [location, navigate]);
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>Payment Successful!</h2>
-      <p style={styles.message}>
-        Thank you for your payment. Your transaction was completed successfully.
-      </p>
-      <p style={styles.redirectMessage}>
-        You will be redirected to the home page shortly...
-      </p>
+    <div>
+      <h2>Payment Successful!</h2>
+      <p>Redirecting you to your account...</p>
     </div>
   );
 };
+
 
 const styles = {
   container: {

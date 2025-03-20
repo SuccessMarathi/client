@@ -232,51 +232,51 @@ const Packages = () => {
   };
 
 
-const handleFormSubmit = async (e) => {
-  e.preventDefault();
-
-  // Basic validation
-  if (!selectedPackage || !selectedPackage._id) {
-    alert("Error: No package selected!");
-    return;
-  }
-  const { name, email, transactionId, referral } = formData;
-  if (!name || !email || !transactionId) {
-    alert("Please fill in all required fields.");
-    return;
-  }
-
-  setLoading(true);
-  try {
-    // Step 1: Initiate Payment Request
-    const paymentResponse = await axios.post(
-      "https://phonepay-gateway-service.onrender.com/initiate-payment",
-      {
-        amount: selectedPackage.price,
-        courseId: selectedPackage._id,
-        userId: localStorage.getItem("userId"),
-      }
-    );
-
-    if (paymentResponse.data.success) {
-      // Step 2: Simulate Payment Success (for demonstration)
-      // In a real-world scenario, the payment gateway will handle this.
-      setTimeout(() => {
-        setPaymentStatus("success"); // Simulate payment success
-        handlePurchaseCourse(); // Call the purchase API
-      }, 2000); // Simulate a 2-second delay for payment processing
-    } else {
-      setPaymentStatus("failed");
-      alert("Payment initiation failed. Please try again.");
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+  
+    // Basic validation
+    if (!selectedPackage || !selectedPackage._id) {
+      alert("Error: No package selected!");
+      return;
     }
-  } catch (error) {
-    console.error("Error occurred during payment initiation:", error);
-    setPaymentStatus("failed");
-    alert("An error occurred while processing the payment.");
-  } finally {
-    setLoading(false);
-  }
-};
+    const { name, email, transactionId, referral } = formData;
+    if (!name || !email || !transactionId) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+  
+    setLoading(true);
+    try {
+      // Step 1: Initiate Payment Request
+      const paymentResponse = await axios.post(
+        "https://phonepay-gateway-service.onrender.com/initiate-payment",
+        {
+          amount: selectedPackage.price,
+          redirectUrl: `${window.location.origin}/payment-success`, // Redirect URL after payment
+          courseId: selectedPackage._id,
+          userId: localStorage.getItem("userId"), // Assuming you store user ID in localStorage
+        }
+      );
+  
+      if (paymentResponse.data.success) {
+        const redirectUrl = paymentResponse.data.data?.redirectUrl;
+        if (redirectUrl) {
+          // Redirect the user to the payment gateway
+          window.location.href = redirectUrl;
+        } else {
+          alert("Payment initiation failed. No redirect URL returned.");
+        }
+      } else {
+        alert("Payment initiation failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error occurred during payment initiation:", error);
+      alert("An error occurred while processing the payment.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
 const handlePurchaseCourse = async () => {
   try {
