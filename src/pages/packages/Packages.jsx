@@ -317,7 +317,6 @@ const Packages = () => {
   
       console.log("Payment initiation response:", paymentResponse.data);
 
-      const token = localStorage.getItem("token");
   
       if (paymentResponse.data.success && paymentResponse.data.data.redirectUrl) {
         // Step 2: Record the purchase in the backend only if payment initiation is successful
@@ -333,7 +332,7 @@ const Packages = () => {
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Send the token here
+              token: localStorage.getItem("token"),
             },
           }
         );
