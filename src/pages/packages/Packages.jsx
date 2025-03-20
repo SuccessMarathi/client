@@ -316,11 +316,12 @@ const Packages = () => {
       );
   
       console.log("Payment initiation response:", paymentResponse.data);
+
+      const token = localStorage.getItem("token");
   
       if (paymentResponse.data.success && paymentResponse.data.data.redirectUrl) {
         // Step 2: Record the purchase in the backend only if payment initiation is successful
-        const token = localStorage.getItem("token");
-        console.log("Token:", token); // Log the token to verify it's correct
+        
   
         const purchaseResponse = await axios.post(
           `${server}/api/course/purchase`,
@@ -332,10 +333,11 @@ const Packages = () => {
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${token}`, // Send the token here
             },
           }
         );
+        
   
         console.log("Purchase response:", purchaseResponse.data);
   
