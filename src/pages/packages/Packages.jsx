@@ -270,6 +270,7 @@ const Packages = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    transactionId: "",
     referral: "",
   });
 
@@ -328,6 +329,7 @@ const Packages = () => {
             courseId: String(selectedPackage._id),
             name: formData.name,
             email: formData.email,
+            transactionId: formData.transactionId,
             referralId: formData.referral,
           },
           {
@@ -412,6 +414,16 @@ const Packages = () => {
                   type="email"
                   name="email"
                   value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label>transactionId:</label>
+                <input
+                  type="transactionId"
+                  name="transactionId"
+                  value={formData.transactionId}
                   onChange={handleChange}
                   required
                 />
