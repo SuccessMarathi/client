@@ -183,236 +183,12 @@
 
 // success code start
 
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-// import styles from "./Packages.module.css";
-// import { server } from "../../index"; // Ensure this is correctly set
-// import qrCode from "../../Assets/akashQR.jpg"; // QR Code Image
-// import { useNavigate } from "react-router-dom"; // Navigate hook for redirection
-
-// const Packages = () => {
-//   const [packages, setPackages] = useState([]); // Store API response
-//   const [isPopupOpen, setIsPopupOpen] = useState(false);
-//   const [selectedPackage, setSelectedPackage] = useState(null);
-//   const [loading, setLoading] = useState(false);
-//   const [formData, setFormData] = useState({
-//     name: "",
-//     email: "",
-//     transactionId: "",
-//     referral: "",
-//   });
-
-//   const navigate = useNavigate(); // Hook to navigate
-
-//   // Fetch all courses when the component mounts
-//   useEffect(() => {
-//     const fetchPackages = async () => {
-//       try {
-//         const response = await axios.get(`${server}/api/getAllCourses`);
-//         setPackages(response.data.course); // Store the course data in state
-//       } catch (error) {
-//         console.error("Error fetching packages:", error);
-//       }
-//     };
-//     fetchPackages();
-//   }, []);
-
-//   const openPopup = (pkg) => {
-//     setSelectedPackage(pkg);
-//     setIsPopupOpen(true);
-//   };
-
-//   const closePopup = () => {
-//     setIsPopupOpen(false);
-//     setSelectedPackage(null);
-//   };
-
-//   const handleChange = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-
-//   const handleFormSubmit = async (e) => {
-//     e.preventDefault();
-  
-//     // Basic validation
-//     if (!selectedPackage || !selectedPackage._id) {
-//       alert("Error: No package selected!");
-//       return;
-//     }
-//     const { name, email, transactionId, referral } = formData;
-//     if (!name || !email || !transactionId) {
-//       alert("Please fill in all required fields.");
-//       return;
-//     }
-  
-//     setLoading(true);
-//     try {
-//       // Step 1: Initiate Payment Request (e.g., via PhonePay or other payment gateways)
-//       console.log("Initiating payment with amount:", selectedPackage.price);  // Log the payment amount
-//       const paymentResponse = await axios.post(
-//         "https://phonepay-gateway-service.onrender.com/initiate-payment", // Replace with your actual payment gateway URL
-//         {
-//           amount: selectedPackage.price, // Send the amount to the payment gateway
-//         }
-//       );
-  
-//       console.log("Payment initiation response:", paymentResponse.data);  // Log the response to check for success or failure
-  
-//       if (paymentResponse.data.success) {
-//         // Check if the payment gateway gives us a redirect URL
-//         const redirectUrl = paymentResponse.data.data?.redirectUrl;
-  
-//         if (redirectUrl) {
-//           // If a redirect URL is received, navigate the user to the payment gateway
-//           window.location.href = redirectUrl;
-//         } else {
-//           alert("Payment initiation failed. No redirect URL returned.");
-//         }
-  
-//         // Wait for successful payment (this part depends on how the flow works with the payment gateway)
-//         // Step 2: After successful payment, proceed to the course purchase
-//         const purchaseResponse = await axios.post(
-//           `${server}/api/course/purchase`,
-//           {
-//             courseId: selectedPackage._id,
-//             name,
-//             email,
-//             transactionId,
-//             referralId: referral,
-//           },
-//           {
-//             headers: {
-//               token: localStorage.getItem("token"), // Assuming you are using JWT for authentication
-//             },
-//           }
-//         );
-  
-//         console.log("Purchase Response:", purchaseResponse.data);  // Log the response
-  
-//         if (purchaseResponse.status === 200) {
-//           alert("Payment successful! Course added to your account.");
-//           closePopup();
-//         } else {
-//           alert(purchaseResponse.data.message || "Course purchase failed. Please try again.");
-//         }
-//       } else {
-//         // If payment initiation fails, log the error message
-//         console.error("Payment initiation failed:", paymentResponse.data.message);
-//         alert("Payment initiation failed. Please try again.");
-//       }
-//     } catch (error) {
-//       // Log the full error to understand what's going wrong
-//       console.error("Error occurred during payment or purchase:", error.response ? error.response.data : error);
-//       alert("An error occurred while processing the payment.");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-  
-  
-  
-
-//   return (
-//     <section className={styles.packages}>
-//       <h2 className={styles.heading}>Our Packages</h2>
-//       <div className={styles.cardContainer}>
-//         {packages.length > 0 ? (
-//           packages.map((pkg) => (
-//             <div className={styles.card} key={pkg._id}>
-//               <img
-//                 src={`${server}/${pkg.image}`} // Dynamically load images
-//                 alt={pkg.name}
-//                 className={styles.image}
-//               />
-//               <h3 className={styles.title}>{pkg.name}</h3>
-//               <p className={styles.price}>₹{pkg.price}/-</p>
-//               <p className={styles.description}>{pkg.description}</p>
-//               <button
-//                 className={styles.buyNowButton}
-//                 onClick={() => openPopup(pkg)}
-//               >
-//                 Buy Now
-//               </button>
-//             </div>
-//           ))
-//         ) : (
-//           <p>Loading packages...</p>
-//         )}
-//       </div>
-//       {isPopupOpen && (
-//         <div className={styles.popup}>
-//           <div className={styles.popupContent}>
-//             <button className={styles.closeButton} onClick={closePopup}>
-//               &times;
-//             </button>
-//             <h3 className={styles.popupTitle}>
-//               {selectedPackage?.name} - ₹{selectedPackage?.price}
-//             </h3>
-//             <img src={qrCode} alt="QR Code" className={styles.qrCode} />
-//             <form onSubmit={handleFormSubmit} className={styles.paymentForm}>
-//               <div className={styles.formGroup}>
-//                 <label>Name:</label>
-//                 <input
-//                   type="text"
-//                   name="name"
-//                   value={formData.name}
-//                   onChange={handleChange}
-//                   required
-//                 />
-//               </div>
-//               <div className={styles.formGroup}>
-//                 <label>Email:</label>
-//                 <input
-//                   type="email"
-//                   name="email"
-//                   value={formData.email}
-//                   onChange={handleChange}
-//                   required
-//                 />
-//               </div>
-//               <div className={styles.formGroup}>
-//                 <label>Transaction ID:</label>
-//                 <input
-//                   type="text"
-//                   name="transactionId"
-//                   value={formData.transactionId}
-//                   onChange={handleChange}
-//                   required
-//                 />
-//               </div>
-//               <div className={styles.formGroup}>
-//                 <label>Referral ID (Optional):</label>
-//                 <input
-//                   type="text"
-//                   name="referral"
-//                   value={formData.referral}
-//                   onChange={handleChange}
-//                 />
-//               </div>
-//               <button
-//                 type="submit"
-//                 className={styles.submitButton}
-//                 disabled={loading}
-//               >
-//                 {loading ? "Processing..." : "Submit Payment"}
-//               </button>
-//             </form>
-//           </div>
-//         </div>
-//       )}
-//     </section>
-//   );
-// };
-
-// export default Packages;
-
-// success code end
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { server } from "../../index"; // Ensure this is correctly set
 import styles from "./Packages.module.css";
+import { server } from "../../index"; // Ensure this is correctly set
 import qrCode from "../../Assets/akashQR.jpg"; // QR Code Image
+import { useNavigate } from "react-router-dom"; // Navigate hook for redirection
 
 const Packages = () => {
   const [packages, setPackages] = useState([]); // Store API response
@@ -426,7 +202,9 @@ const Packages = () => {
     referral: "",
   });
 
-  // Fetch all packages when the component mounts
+  const navigate = useNavigate(); // Hook to navigate
+
+  // Fetch all courses when the component mounts
   useEffect(() => {
     const fetchPackages = async () => {
       try {
@@ -439,108 +217,101 @@ const Packages = () => {
     fetchPackages();
   }, []);
 
-  // Open popup to purchase a course
   const openPopup = (pkg) => {
     setSelectedPackage(pkg);
     setIsPopupOpen(true);
   };
 
-  // Close the popup
   const closePopup = () => {
     setIsPopupOpen(false);
     setSelectedPackage(null);
   };
 
-  // Handle form input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
-    // Check if package is selected
+  
+    // Basic validation
     if (!selectedPackage || !selectedPackage._id) {
       alert("Error: No package selected!");
       return;
     }
-
     const { name, email, transactionId, referral } = formData;
-
-    // Ensure all required fields are filled
     if (!name || !email || !transactionId) {
       alert("Please fill in all required fields.");
       return;
     }
-
+  
     setLoading(true);
-
     try {
-           // Step 2: Initiate payment via PhonePay (or your preferred payment gateway)
+      // Step 1: Initiate Payment Request (e.g., via PhonePay or other payment gateways)
+      console.log("Initiating payment with amount:", selectedPackage.price);  // Log the payment amount
       const paymentResponse = await axios.post(
-        "https://phonepay-gateway-service.onrender.com/initiate-payment", // Payment gateway URL
+        "https://phonepay-gateway-service.onrender.com/initiate-payment", // Replace with your actual payment gateway URL
         {
-          amount: selectedPackage.price, // Payment amount
+          amount: selectedPackage.price, // Send the amount to the payment gateway
         }
       );
-
-      if (paymentResponse.data.success) {
+  
+      console.log("Payment initiation response:", paymentResponse.data);  // Log the response to check for success or failure
+  
+      if (paymentResponse.data?.success) {
+        // Check if the payment gateway gives us a redirect URL
         const redirectUrl = paymentResponse.data.data?.redirectUrl;
 
-        if (redirectUrl) {
-          // Step 3: Redirect user to PhonePay payment gateway
-          window.location.href = redirectUrl;
-        } else {
-          alert("Payment initiation failed. No redirect URL returned.");
-          setLoading(false);
-        }
-      } else {
-        alert("Payment initiation failed. Please try again.");
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error("Error during payment or enrollment:", error.response ? error.response.data : error);
-      alert("An error occurred while processing the payment.");
-      setLoading(false);
-    }
-  };
-
-  // Handle course purchase after successful payment
-  const handleCoursePurchase = async (paymentStatus, transactionId) => {
-    if (paymentStatus === "success") {
-      try {
-        // Step 4: If payment was successful, add course to user's account
-        const response = await axios.post(
+        const purchaseResponse = await axios.post(
           `${server}/api/course/purchase`,
           {
             courseId: selectedPackage._id,
-            name: formData.name,
-            email: formData.email,
-            transactionId: transactionId,
-            referralId: formData.referral,
+            name,
+            email,
+            transactionId,
+            referralId: referral,
           },
           {
             headers: {
-              token: localStorage.getItem("token"),
+              token: localStorage.getItem("token"), // Assuming you are using JWT for authentication
             },
           }
         );
-
-        if (response.status === 200) {
+  
+        console.log("Purchase Response:", purchaseResponse.data);  // Log the response
+  
+        if (purchaseResponse.state === 200) {
           alert("Payment successful! Course added to your account.");
           closePopup();
+          if (redirectUrl) {
+            // If a redirect URL is received, navigate the user to the payment gateway
+  
+            window.location.href = redirectUrl;
+          } else {
+            alert("Payment initiation failed. No redirect URL returned.");
+          }
         } else {
-          alert("Course purchase failed. Please try again.");
+          alert(purchaseResponse.data.message || "Course purchase failed. Please try again.");
         }
-      } catch (error) {
-        console.error("Error purchasing course:", error);
-        alert("An error occurred while adding the course to your account.");
+
+        
+  
+      } else {
+        // If payment initiation fails, log the error message
+        console.error("Payment initiation failed:", paymentResponse.data.message);
+        alert("Payment initiation failed. Please try again.");
       }
-    } else {
-      alert("Payment failed. The course will not be added.");
+    } catch (error) {
+      // Log the full error to understand what's going wrong
+      console.error("Error occurred during payment or purchase:", error.response ? error.response.data : error);
+      alert("An error occurred while processing the payment.");
+    } finally {
+      setLoading(false);
     }
   };
+  
+  
+  
 
   return (
     <section className={styles.packages}>
@@ -569,7 +340,6 @@ const Packages = () => {
           <p>Loading packages...</p>
         )}
       </div>
-
       {isPopupOpen && (
         <div className={styles.popup}>
           <div className={styles.popupContent}>
@@ -636,6 +406,10 @@ const Packages = () => {
 };
 
 export default Packages;
+
+// success code end
+
+
 
 
 
