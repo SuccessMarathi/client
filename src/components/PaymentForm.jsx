@@ -19,26 +19,6 @@ const PaymentForm = () => {
       return;
     }
 
-    // try {
-    //   const response = await axios.post(
-    //     "https://phonepay-gateway-service.onrender.com/initiate-payment",
-    //     { amount }
-    //   );
-
-    //   if (response.data.data.redirectUrl) {
-    //     // Redirect to PhonePe payment page
-    //     window.location.href = response.data.data.redirectUrl;
-    //   } else if (response.data.data.merchantOrderId) {
-    //     // Redirect to payment status page with order ID
-    //     navigate(`/payment-status/${response.data.data.merchantOrderId}`);
-    //   }
-    // } catch (err) {
-    //   setError("Payment initiation failed. Please try again.");
-    //   console.error("Error initiating payment:", err);
-    // } finally {
-    //   setLoading(false);
-    // }'
-  
     try {
       const response = await axios.post(
         "https://phonepay-gateway-service.onrender.com/initiate-payment",
