@@ -260,7 +260,6 @@ const Packages = () => {
   
       if (paymentResponse.data?.success) {
         // Check if the payment gateway gives us a redirect URL
-        const redirectUrl = paymentResponse.data.data?.redirectUrl;
 
         const purchaseResponse = await axios.post(
           `${server}/api/course/purchase`,
@@ -283,6 +282,8 @@ const Packages = () => {
         if (purchaseResponse.state === 200) {
           alert("Payment successful! Course added to your account.");
           closePopup();
+          const redirectUrl = paymentResponse.data.data?.redirectUrl;
+
           if (redirectUrl) {
             // If a redirect URL is received, navigate the user to the payment gateway
   
