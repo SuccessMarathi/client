@@ -181,51 +181,263 @@
 // export default Packages;
 
 
+// success code start
+
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import styles from "./Packages.module.css";
+// import { server } from "../../index"; // Ensure this is correctly set
+// import qrCode from "../../Assets/akashQR.jpg"; // QR Code Image
+// import { useNavigate } from "react-router-dom"; // Navigate hook for redirection
+
+// const Packages = () => {
+//   const [packages, setPackages] = useState([]); // Store API response
+//   const [isPopupOpen, setIsPopupOpen] = useState(false);
+//   const [selectedPackage, setSelectedPackage] = useState(null);
+//   const [loading, setLoading] = useState(false);
+//   const [formData, setFormData] = useState({
+//     name: "",
+//     email: "",
+//     transactionId: "",
+//     referral: "",
+//   });
+
+//   const navigate = useNavigate(); // Hook to navigate
+
+//   // Fetch all courses when the component mounts
+//   useEffect(() => {
+//     const fetchPackages = async () => {
+//       try {
+//         const response = await axios.get(`${server}/api/getAllCourses`);
+//         setPackages(response.data.course); // Store the course data in state
+//       } catch (error) {
+//         console.error("Error fetching packages:", error);
+//       }
+//     };
+//     fetchPackages();
+//   }, []);
+
+//   const openPopup = (pkg) => {
+//     setSelectedPackage(pkg);
+//     setIsPopupOpen(true);
+//   };
+
+//   const closePopup = () => {
+//     setIsPopupOpen(false);
+//     setSelectedPackage(null);
+//   };
+
+//   const handleChange = (e) => {
+//     setFormData({ ...formData, [e.target.name]: e.target.value });
+//   };
+
+//   const handleFormSubmit = async (e) => {
+//     e.preventDefault();
+  
+//     // Basic validation
+//     if (!selectedPackage || !selectedPackage._id) {
+//       alert("Error: No package selected!");
+//       return;
+//     }
+//     const { name, email, transactionId, referral } = formData;
+//     if (!name || !email || !transactionId) {
+//       alert("Please fill in all required fields.");
+//       return;
+//     }
+  
+//     setLoading(true);
+//     try {
+//       // Step 1: Initiate Payment Request (e.g., via PhonePay or other payment gateways)
+//       console.log("Initiating payment with amount:", selectedPackage.price);  // Log the payment amount
+//       const paymentResponse = await axios.post(
+//         "https://phonepay-gateway-service.onrender.com/initiate-payment", // Replace with your actual payment gateway URL
+//         {
+//           amount: selectedPackage.price, // Send the amount to the payment gateway
+//         }
+//       );
+  
+//       console.log("Payment initiation response:", paymentResponse.data);  // Log the response to check for success or failure
+  
+//       if (paymentResponse.data.success) {
+//         // Check if the payment gateway gives us a redirect URL
+//         const redirectUrl = paymentResponse.data.data?.redirectUrl;
+  
+//         if (redirectUrl) {
+//           // If a redirect URL is received, navigate the user to the payment gateway
+//           window.location.href = redirectUrl;
+//         } else {
+//           alert("Payment initiation failed. No redirect URL returned.");
+//         }
+  
+//         // Wait for successful payment (this part depends on how the flow works with the payment gateway)
+//         // Step 2: After successful payment, proceed to the course purchase
+//         const purchaseResponse = await axios.post(
+//           `${server}/api/course/purchase`,
+//           {
+//             courseId: selectedPackage._id,
+//             name,
+//             email,
+//             transactionId,
+//             referralId: referral,
+//           },
+//           {
+//             headers: {
+//               token: localStorage.getItem("token"), // Assuming you are using JWT for authentication
+//             },
+//           }
+//         );
+  
+//         console.log("Purchase Response:", purchaseResponse.data);  // Log the response
+  
+//         if (purchaseResponse.status === 200) {
+//           alert("Payment successful! Course added to your account.");
+//           closePopup();
+//         } else {
+//           alert(purchaseResponse.data.message || "Course purchase failed. Please try again.");
+//         }
+//       } else {
+//         // If payment initiation fails, log the error message
+//         console.error("Payment initiation failed:", paymentResponse.data.message);
+//         alert("Payment initiation failed. Please try again.");
+//       }
+//     } catch (error) {
+//       // Log the full error to understand what's going wrong
+//       console.error("Error occurred during payment or purchase:", error.response ? error.response.data : error);
+//       alert("An error occurred while processing the payment.");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+  
+  
+  
+
+//   return (
+//     <section className={styles.packages}>
+//       <h2 className={styles.heading}>Our Packages</h2>
+//       <div className={styles.cardContainer}>
+//         {packages.length > 0 ? (
+//           packages.map((pkg) => (
+//             <div className={styles.card} key={pkg._id}>
+//               <img
+//                 src={`${server}/${pkg.image}`} // Dynamically load images
+//                 alt={pkg.name}
+//                 className={styles.image}
+//               />
+//               <h3 className={styles.title}>{pkg.name}</h3>
+//               <p className={styles.price}>₹{pkg.price}/-</p>
+//               <p className={styles.description}>{pkg.description}</p>
+//               <button
+//                 className={styles.buyNowButton}
+//                 onClick={() => openPopup(pkg)}
+//               >
+//                 Buy Now
+//               </button>
+//             </div>
+//           ))
+//         ) : (
+//           <p>Loading packages...</p>
+//         )}
+//       </div>
+//       {isPopupOpen && (
+//         <div className={styles.popup}>
+//           <div className={styles.popupContent}>
+//             <button className={styles.closeButton} onClick={closePopup}>
+//               &times;
+//             </button>
+//             <h3 className={styles.popupTitle}>
+//               {selectedPackage?.name} - ₹{selectedPackage?.price}
+//             </h3>
+//             <img src={qrCode} alt="QR Code" className={styles.qrCode} />
+//             <form onSubmit={handleFormSubmit} className={styles.paymentForm}>
+//               <div className={styles.formGroup}>
+//                 <label>Name:</label>
+//                 <input
+//                   type="text"
+//                   name="name"
+//                   value={formData.name}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </div>
+//               <div className={styles.formGroup}>
+//                 <label>Email:</label>
+//                 <input
+//                   type="email"
+//                   name="email"
+//                   value={formData.email}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </div>
+//               <div className={styles.formGroup}>
+//                 <label>Transaction ID:</label>
+//                 <input
+//                   type="text"
+//                   name="transactionId"
+//                   value={formData.transactionId}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </div>
+//               <div className={styles.formGroup}>
+//                 <label>Referral ID (Optional):</label>
+//                 <input
+//                   type="text"
+//                   name="referral"
+//                   value={formData.referral}
+//                   onChange={handleChange}
+//                 />
+//               </div>
+//               <button
+//                 type="submit"
+//                 className={styles.submitButton}
+//                 disabled={loading}
+//               >
+//                 {loading ? "Processing..." : "Submit Payment"}
+//               </button>
+//             </form>
+//           </div>
+//         </div>
+//       )}
+//     </section>
+//   );
+// };
+
+// export default Packages;
+
+// success code end
 
 
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import styles from "./Packages.module.css";
-import { server } from "../../index"; // Ensure this is correctly set
-import qrCode from "../../Assets/akashQR.jpg"; // QR Code Image
-import { useNavigate } from "react-router-dom"; // Navigate hook for redirection
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { server } from '../../index'; // Assuming the server URL is correctly set
+import styles from './Packages.module.css'; // Assuming the correct CSS file
+import qrCode from '../../Assets/akashQR.jpg'; // QR Code Image
 
 const Packages = () => {
-  const [packages, setPackages] = useState([]); // Store API response
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [packages, setPackages] = useState([]);
   const [selectedPackage, setSelectedPackage] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    transactionId: "",
-    referral: "",
+    name: '',
+    email: '',
+    transactionId: '',
+    referral: '',
   });
+  const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate(); // Hook to navigate
-
-  // Fetch all courses when the component mounts
+  // Fetch all packages on mount
   useEffect(() => {
     const fetchPackages = async () => {
       try {
         const response = await axios.get(`${server}/api/getAllCourses`);
-        setPackages(response.data.course); // Store the course data in state
+        setPackages(response.data.course);
       } catch (error) {
-        console.error("Error fetching packages:", error);
+        console.error('Error fetching packages:', error);
       }
     };
     fetchPackages();
   }, []);
-
-  const openPopup = (pkg) => {
-    setSelectedPackage(pkg);
-    setIsPopupOpen(true);
-  };
-
-  const closePopup = () => {
-    setIsPopupOpen(false);
-    setSelectedPackage(null);
-  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -233,84 +445,112 @@ const Packages = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-  
-    // Basic validation
+
+    // Check if package is selected
     if (!selectedPackage || !selectedPackage._id) {
-      alert("Error: No package selected!");
+      alert('Error: No package selected!');
       return;
     }
+
+    // Extract form data
     const { name, email, transactionId, referral } = formData;
+
+    // Check if all required fields are filled
     if (!name || !email || !transactionId) {
-      alert("Please fill in all required fields.");
+      alert('Please fill in all required fields.');
       return;
     }
-  
+
     setLoading(true);
+
     try {
-      // Step 1: Initiate Payment Request (e.g., via PhonePay or other payment gateways)
-      console.log("Initiating payment with amount:", selectedPackage.price);  // Log the payment amount
-      const paymentResponse = await axios.post(
-        "https://phonepay-gateway-service.onrender.com/initiate-payment", // Replace with your actual payment gateway URL
+      // Step 1: Check if the user is already enrolled in the selected course
+      const checkEnrollmentResponse = await axios.get(
+        `${server}/api/course/check-enrollment/${selectedPackage._id}`,
         {
-          amount: selectedPackage.price, // Send the amount to the payment gateway
+          headers: {
+            token: localStorage.getItem('token'), // Assuming JWT token is being used
+          },
         }
       );
-  
-      console.log("Payment initiation response:", paymentResponse.data);  // Log the response to check for success or failure
-  
+
+      if (checkEnrollmentResponse.data.isEnrolled) {
+        alert('You are already enrolled in this course.');
+        setLoading(false);
+        return;
+      }
+
+      // Step 2: Initiate payment via PhonePay
+      const paymentResponse = await axios.post(
+        'https://phonepay-gateway-service.onrender.com/initiate-payment', // Payment gateway URL
+        {
+          amount: selectedPackage.price, // Payment amount
+        }
+      );
+
       if (paymentResponse.data.success) {
-        // Check if the payment gateway gives us a redirect URL
         const redirectUrl = paymentResponse.data.data?.redirectUrl;
-  
+
         if (redirectUrl) {
-          // If a redirect URL is received, navigate the user to the payment gateway
+          // Step 3: Redirect user to PhonePay payment gateway
           window.location.href = redirectUrl;
         } else {
-          alert("Payment initiation failed. No redirect URL returned.");
+          alert('Payment initiation failed. No redirect URL returned.');
+          setLoading(false);
         }
-  
-        // Wait for successful payment (this part depends on how the flow works with the payment gateway)
-        // Step 2: After successful payment, proceed to the course purchase
-        const purchaseResponse = await axios.post(
-          `${server}/api/course/purchase`,
-          {
-            courseId: selectedPackage._id,
-            name,
-            email,
-            transactionId,
-            referralId: referral,
-          },
-          {
-            headers: {
-              token: localStorage.getItem("token"), // Assuming you are using JWT for authentication
+
+        // After payment is successful (this part depends on your implementation)
+        // Step 4: Once the user returns from the payment gateway, verify payment status
+        const paymentStatusResponse = await checkPaymentStatus(paymentResponse.data.data.merchantOrderId);
+
+        if (paymentStatusResponse.success) {
+          // Step 5: Proceed to add the course to the user's account
+          const purchaseResponse = await axios.post(
+            `${server}/api/course/purchase`,
+            {
+              courseId: selectedPackage._id,
+              name,
+              email,
+              transactionId,
+              referralId: referral,
             },
+            {
+              headers: {
+                token: localStorage.getItem('token'),
+              },
+            }
+          );
+
+          if (purchaseResponse.status === 200) {
+            alert('Payment successful! Course added to your account.');
+          } else {
+            alert('Course purchase failed. Please try again.');
           }
-        );
-  
-        console.log("Purchase Response:", purchaseResponse.data);  // Log the response
-  
-        if (purchaseResponse.status === 200) {
-          alert("Payment successful! Course added to your account.");
-          closePopup();
         } else {
-          alert(purchaseResponse.data.message || "Course purchase failed. Please try again.");
+          alert('Payment failed. Please try again.');
         }
       } else {
-        // If payment initiation fails, log the error message
-        console.error("Payment initiation failed:", paymentResponse.data.message);
-        alert("Payment initiation failed. Please try again.");
+        alert('Payment initiation failed. Please try again.');
       }
     } catch (error) {
-      // Log the full error to understand what's going wrong
-      console.error("Error occurred during payment or purchase:", error.response ? error.response.data : error);
-      alert("An error occurred while processing the payment.");
+      console.error('Error during payment or enrollment:', error.response ? error.response.data : error);
+      alert('An error occurred while processing the payment.');
     } finally {
       setLoading(false);
     }
   };
-  
-  
-  
+
+  const checkPaymentStatus = async (merchantOrderId) => {
+    try {
+      const response = await axios.get(
+        `https://phonepay-gateway-service.onrender.com/payment-status/${merchantOrderId}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error checking payment status:', error);
+      return { success: false };
+    }
+  };
 
   return (
     <section className={styles.packages}>
@@ -329,7 +569,7 @@ const Packages = () => {
               <p className={styles.description}>{pkg.description}</p>
               <button
                 className={styles.buyNowButton}
-                onClick={() => openPopup(pkg)}
+                onClick={() => setSelectedPackage(pkg)}
               >
                 Buy Now
               </button>
@@ -339,10 +579,11 @@ const Packages = () => {
           <p>Loading packages...</p>
         )}
       </div>
-      {isPopupOpen && (
+
+      {selectedPackage && (
         <div className={styles.popup}>
           <div className={styles.popupContent}>
-            <button className={styles.closeButton} onClick={closePopup}>
+            <button className={styles.closeButton} onClick={() => setSelectedPackage(null)}>
               &times;
             </button>
             <h3 className={styles.popupTitle}>
@@ -394,7 +635,7 @@ const Packages = () => {
                 className={styles.submitButton}
                 disabled={loading}
               >
-                {loading ? "Processing..." : "Submit Payment"}
+                {loading ? 'Processing...' : 'Submit Payment'}
               </button>
             </form>
           </div>
@@ -405,6 +646,7 @@ const Packages = () => {
 };
 
 export default Packages;
+
 
 
 
