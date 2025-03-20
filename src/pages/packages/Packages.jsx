@@ -39,35 +39,21 @@ const Packages = () => {
   };
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log("Selected Package on Submit:", selectedPackage);
+  
+    const { name, email, transactionId, referral } = formData; // Extract form data here
   
     if (!selectedPackage || !selectedPackage._id) {
       alert("Error: No package selected!");
       return;
     }
   
-    const { name, email, transactionId, referral } = formData;
-    if (!name || !email || !transactionId) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-  
     setLoading(true);
-  
     try {
-      console.log("Sending Request Data:", {
-        courseId: selectedPackage._id, // Ensure this is NOT undefined
-        name,
-        email,
-        transactionId,
-        referralId: referral,
-      });
-  
-      // Step 1: Send request to record the course purchase
+      // Step 1: Record the purchase in the backend first
       const response = await axios.post(
         `${server}/api/course/purchase`,
         {
-          courseId: selectedPackage._id,
+          courseId: selectedPackage._id, // Ensure this is NOT undefined
           name,
           email,
           transactionId,
@@ -80,16 +66,16 @@ const Packages = () => {
         }
       );
   
-      console.log("Server Response:", response.data);
+      console.log("Purchase response:", response.data);
   
       if (response.data.success) {
-        // Step 2: If purchase is successful, initiate PhonePe payment
+        // Step 2: Initiate PhonePe payment only if purchase is successful
         const paymentResponse = await axios.post(
           "https://phonepay-gateway-service.onrender.com/initiate-payment",
-          {
-            amount: selectedPackage.price * 100, // Convert to paise
-          }
+          { amount: selectedPackage.price * 100 } // Convert to paise if required
         );
+  
+        console.log("Payment initiation response:", paymentResponse.data);
   
         if (paymentResponse.data.success && paymentResponse.data.data.redirectUrl) {
           // Step 3: Redirect to the payment gateway's URL
@@ -102,12 +88,26 @@ const Packages = () => {
         alert("Failed to record purchase. Please try again.");
       }
     } catch (error) {
-      console.error("Error during the purchase/payment process:", error.response?.data || error.message);
-      alert("An error occurred. Please try again.");
+      console.error("Error during the purchase/payment process:", error);
+      
+      if (error.response) {
+        // Log the full error response from the API
+        console.error("Error response:", error.response);
+        alert(`Error: ${error.response?.data?.message || error.message}. Please try again.`);
+      } else if (error.request) {
+        // If no response received from the server
+        console.error("No response received:", error.request);
+        alert("No response from the server. Please check your internet connection.");
+      } else {
+        // Other errors
+        console.error("Error message:", error.message);
+        alert(`An error occurred: ${error.message}. Please try again.`);
+      }
     } finally {
       setLoading(false);
     }
   };
+  
   
   return (
     <section className={styles.packages}>
