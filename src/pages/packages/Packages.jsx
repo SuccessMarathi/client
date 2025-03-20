@@ -233,7 +233,7 @@ const Packages = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Basic validation
     if (!selectedPackage || !selectedPackage._id) {
       alert("Error: No package selected!");
@@ -244,19 +244,20 @@ const Packages = () => {
       alert("Please fill in all required fields.");
       return;
     }
-
+  
     setLoading(true);
     try {
       // Step 1: Initiate Payment Request (e.g., via PhonePay or other payment gateways)
+      console.log("Initiating payment with amount:", selectedPackage.price);  // Log the payment amount
       const paymentResponse = await axios.post(
         "https://phonepay-gateway-service.onrender.com/initiate-payment", // Replace with your actual payment gateway URL
         {
           amount: selectedPackage.price, // Send the amount to the payment gateway
         }
       );
-
-      console.log("Payment initiation response:", paymentResponse.data);
-
+  
+      console.log("Payment initiation response:", paymentResponse.data);  // Log the response to check for success or failure
+  
       if (paymentResponse.data.success) {
         // Step 2: If the payment is initiated successfully, proceed with purchasing the course
         const purchaseResponse = await axios.post(
@@ -274,9 +275,9 @@ const Packages = () => {
             },
           }
         );
-
-        console.log("Purchase Response:", purchaseResponse.data);
-        
+  
+        console.log("Purchase Response:", purchaseResponse.data);  // Log the response
+  
         if (purchaseResponse.status === 200) {
           alert("Payment successful! Course added to your account.");
           closePopup();
@@ -284,15 +285,19 @@ const Packages = () => {
           alert(purchaseResponse.data.message || "Course purchase failed. Please try again.");
         }
       } else {
+        // If payment initiation fails, log the error message
+        console.error("Payment initiation failed:", paymentResponse.data.message);
         alert("Payment initiation failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error:", error.response ? error.response.data : error);
+      // Log the full error to understand what's going wrong
+      console.error("Error occurred during payment or purchase:", error.response ? error.response.data : error);
       alert("An error occurred while processing the payment.");
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <section className={styles.packages}>
