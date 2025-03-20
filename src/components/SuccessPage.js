@@ -5,24 +5,25 @@ import axios from "axios";
 import { server } from "../index"; 
 const SuccessPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const transactionId = queryParams.get("transaction_id");
-    const courseId = queryParams.get("course_id");
-    const userId = localStorage.getItem("userId");
+    // Retrieve form data from local storage
+    const formData = JSON.parse(localStorage.getItem("formData"));
 
-    if (transactionId && courseId && userId) {
-      // Call the purchase API to add the course to the user's account
+    if (formData) {
+      const { name, email, transactionId, referral, courseId } = formData;
+
+      // Call the purchase API
       const purchaseCourse = async () => {
         try {
           const purchaseResponse = await axios.post(
             `${server}/api/course/purchase`,
             {
               courseId,
-              userId,
+              name,
+              email,
               transactionId,
+              referralId: referral,
             },
             {
               headers: {
@@ -33,6 +34,7 @@ const SuccessPage = () => {
 
           if (purchaseResponse.status === 200) {
             alert("Payment successful! Course added to your account.");
+            localStorage.removeItem("formData"); // Clear stored form data
             navigate("/account"); // Redirect to the account page
           } else {
             alert("Course purchase failed. Please try again.");
@@ -50,7 +52,7 @@ const SuccessPage = () => {
       alert("Invalid payment details. Please try again.");
       navigate("/packages"); // Redirect back to packages page
     }
-  }, [location, navigate]);
+  }, [navigate]);
 
   return (
     <div>

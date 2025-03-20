@@ -246,16 +246,25 @@ const Packages = () => {
       return;
     }
   
+    // Step 1: Store form data in local storage
+    const formDataToStore = {
+      name,
+      email,
+      transactionId,
+      referral,
+      courseId: selectedPackage._id,
+    };
+    localStorage.setItem("formData", JSON.stringify(formDataToStore));
+  
+    // Step 2: Redirect to payment gateway
     setLoading(true);
     try {
-      // Step 1: Initiate Payment Request
       const paymentResponse = await axios.post(
         "https://phonepay-gateway-service.onrender.com/initiate-payment",
         {
           amount: selectedPackage.price,
           redirectUrl: `${window.location.origin}/payment-success`, // Redirect URL after payment
           courseId: selectedPackage._id,
-          userId: localStorage.getItem("userId"), // Assuming you store user ID in localStorage
         }
       );
   
@@ -278,35 +287,35 @@ const Packages = () => {
     }
   };
 
-const handlePurchaseCourse = async () => {
-  try {
-    const purchaseResponse = await axios.post(
-      `${server}/api/course/purchase`,
-      {
-        courseId: selectedPackage._id,
-        name: formData.name,
-        email: formData.email,
-        transactionId: formData.transactionId,
-        referralId: formData.referral,
-      },
-      {
-        headers: {
-          token: localStorage.getItem("token"), // Assuming you are using JWT for authentication
-        },
-      }
-    );
+// const handlePurchaseCourse = async () => {
+//   try {
+//     const purchaseResponse = await axios.post(
+//       `${server}/api/course/purchase`,
+//       {
+//         courseId: selectedPackage._id,
+//         name: formData.name,
+//         email: formData.email,
+//         transactionId: formData.transactionId,
+//         referralId: formData.referral,
+//       },
+//       {
+//         headers: {
+//           token: localStorage.getItem("token"), // Assuming you are using JWT for authentication
+//         },
+//       }
+//     );
 
-    if (purchaseResponse.status === 200) {
-      alert("Payment successful! Course added to your account.");
-      closePopup();
-    } else {
-      alert("Course purchase failed. Please try again.");
-    }
-  } catch (error) {
-    console.error("Error during course purchase:", error);
-    alert("An error occurred while processing the payment.");
-  }
-};
+//     if (purchaseResponse.status === 200) {
+//       alert("Payment successful! Course added to your account.");
+//       closePopup();
+//     } else {
+//       alert("Course purchase failed. Please try again.");
+//     }
+//   } catch (error) {
+//     console.error("Error during course purchase:", error);
+//     alert("An error occurred while processing the payment.");
+//   }
+// };
   
   
   
