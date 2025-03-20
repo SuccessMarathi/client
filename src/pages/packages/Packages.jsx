@@ -495,49 +495,50 @@ const Packages = () => {
 
     setLoading(true);
     try {
-      // Step 1: Initiate PhonePe payment
-      const paymentResponse = await axios.post(
-        "https://phonepay-gateway-service.onrender.com/initiate-payment",
-        { amount: selectedPackage.price * 100 } // Convert to paise if required
+      // Step 1: Record the purchase in the backend first
+      const response = await axios.post(
+        `${server}/api/course/purchase`,
+        {
+          courseId: selectedPackage._id, // Ensure this is NOT undefined
+          name,
+          email,
+          transactionId,
+          referralId: referral,
+        },
+        {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
       );
 
-      if (paymentResponse.data.success && paymentResponse.data.data.redirectUrl) {
-        // Step 2: Record the purchase in the backend only if payment initiation is successful
-        const response = await axios.post(
-          `${server}/api/course/purchase`,
-          {
-            courseId: selectedPackage._id,  // Ensure this is NOT undefined
-            name,
-            email,
-            transactionId,
-            referralId: referral,
-          },
-          {
-            headers: {
-              token: localStorage.getItem("token"),
-            },
-          }
+      console.log("Purchase response:", response.data);
+
+      if (response.data.success) {
+        // Step 2: Initiate PhonePe payment only if purchase is successful
+        const paymentResponse = await axios.post(
+          "https://phonepay-gateway-service.onrender.com/initiate-payment",
+          { amount: selectedPackage.price * 100 } // Convert to paise if required
         );
 
-        console.log("Purchase response:", response.data);
-
-        if (response.data.success) {
+        if (paymentResponse.data.success && paymentResponse.data.data.redirectUrl) {
           // Step 3: Redirect to the payment gateway's URL
           window.location.href = paymentResponse.data.data.redirectUrl;
         } else {
-          alert("Failed to record purchase. Please try again.");
+          console.error("Payment initiation failed:", paymentResponse.data);
+          alert("Failed to initiate payment. Please try again.");
         }
       } else {
-        console.error("Payment initiation failed:", paymentResponse.data);
-        alert("Failed to initiate payment. Please try again.");
+        alert("Failed to record purchase. Please try again.");
       }
     } catch (error) {
-      console.error("Payment initiation error:", error.response?.data || error.message);
-      alert("Payment initiation failed. Please try again.");
+      console.error("Error during the purchase/payment process:", error.response?.data || error.message);
+      alert("An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
-  };
+};
+
 
   return (
     <section className={styles.packages}>
