@@ -477,24 +477,7 @@ const Packages = () => {
     setLoading(true);
 
     try {
-      // Step 1: Check if the user is already enrolled
-      const checkEnrollmentResponse = await axios.get(
-        `${server}/api/course/check-enrollment/${selectedPackage._id}`,
-        {
-          headers: {
-            token: localStorage.getItem("token"), // Assuming JWT token is used for auth
-          },
-        }
-      );
-
-      // If user is already enrolled, show alert and don't proceed
-      if (checkEnrollmentResponse.data.isEnrolled) {
-        alert("You are already enrolled in this course.");
-        setLoading(false);
-        return;
-      }
-
-      // Step 2: Initiate payment via PhonePay (or your preferred payment gateway)
+           // Step 2: Initiate payment via PhonePay (or your preferred payment gateway)
       const paymentResponse = await axios.post(
         "https://phonepay-gateway-service.onrender.com/initiate-payment", // Payment gateway URL
         {
