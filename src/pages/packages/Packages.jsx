@@ -261,12 +261,39 @@ const Packages = () => {
       if (paymentResponse.data.success) {
         // Check if the payment gateway gives us a redirect URL
         const redirectUrl = paymentResponse.data.data?.redirectUrl;
-        
+  
         if (redirectUrl) {
           // If a redirect URL is received, navigate the user to the payment gateway
           window.location.href = redirectUrl;
         } else {
           alert("Payment initiation failed. No redirect URL returned.");
+        }
+  
+        // Wait for successful payment (this part depends on how the flow works with the payment gateway)
+        // Step 2: After successful payment, proceed to the course purchase
+        const purchaseResponse = await axios.post(
+          `${server}/api/course/purchase`,
+          {
+            courseId: selectedPackage._id,
+            name,
+            email,
+            transactionId,
+            referralId: referral,
+          },
+          {
+            headers: {
+              token: localStorage.getItem("token"), // Assuming you are using JWT for authentication
+            },
+          }
+        );
+  
+        console.log("Purchase Response:", purchaseResponse.data);  // Log the response
+  
+        if (purchaseResponse.status === 200) {
+          alert("Payment successful! Course added to your account.");
+          closePopup();
+        } else {
+          alert(purchaseResponse.data.message || "Course purchase failed. Please try again.");
         }
       } else {
         // If payment initiation fails, log the error message
@@ -281,6 +308,7 @@ const Packages = () => {
       setLoading(false);
     }
   };
+  
   
   
 
