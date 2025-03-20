@@ -203,6 +203,18 @@ const Packages = () => {
     referral: "",
   });
 
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        const response = await axios.get(`${server}/api/getAllCourses`);
+        setPackages(response.data.course); // Store the course data in state
+      } catch (error) {
+        console.error("Error fetching packages:", error);
+      }
+    };
+    fetchPackages();
+  }, []);
+
   const openPopup = (pkg) => {
     setSelectedPackage(pkg);
     setIsPopupOpen(true);
