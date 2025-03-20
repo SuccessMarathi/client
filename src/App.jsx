@@ -39,8 +39,7 @@ import ContactUs from "./components/contact/ContactUs"
 import CancellationRefund from "./components/cnacellationRefund/CancellationRefund";
 import SuccessPage from "./components/SuccessPage";
 import FailurePage from "./components/FailurePage";
-import Phonepay from "./admin/phonepay/Phonepay"
-import PaymentStatus from "./components/PaymentStatus";
+
 
 // import Slider from "./components/slider/Slider";
 
@@ -157,11 +156,6 @@ const App = () => {
               path="/admin/course"
               element={isAuth ? <AdminCourses user={user} /> : <Login />}
             />
-            {/* phonepay testing route */}
-            <Route
-              path="/admin/phonepay"
-              element={isAuth ? <Phonepay user={user} /> : <Login />}
-            />
             <Route
               path="/success"
               element={isAuth ? <SuccessPage user={user} /> : <Login />}
@@ -169,10 +163,6 @@ const App = () => {
              <Route
               path="/failure"
               element={isAuth ? <FailurePage user={user} /> : <Login />}
-            />
-             <Route
-              path="/payment-status/:orderId"
-              element={isAuth ? <PaymentStatus user={user} /> : <Login />}
             />
             <Route
               path="/admin/users"
@@ -186,9 +176,6 @@ const App = () => {
             <Route path="/ContactUs" element={<ContactUs />} />
 
             <Route path="/CancellationRefund" element={<CancellationRefund />} />
-
-            <Route path="/payment-success" element={<SuccessPage />} />
-            <Route path="/payment-failed" element={<FailurePage />} />
 
 
           </Routes>

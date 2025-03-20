@@ -25,30 +25,30 @@ const SuccessPage = () => {
             },
             {
               headers: {
-                token: localStorage.getItem("token"), // Assuming you are using JWT for authentication
+                token: localStorage.getItem("token"), 
               },
             }
           );
 
           if (purchaseResponse.status === 200) {
             alert("Payment successful! Course added to your account.");
-            localStorage.removeItem("formData"); // Clear stored form data
-            navigate("/myCourses"); // Redirect to the account page
+            localStorage.removeItem("formData"); 
+            navigate("/myCourses"); 
           } else {
             alert("Course purchase failed. Please try again.");
-            navigate("/packagesmyCourses"); // Redirect back to packages page
+            navigate("/packages"); 
           }
         } catch (error) {
           console.error("Error during course purchase:", error);
           alert("An error occurred while processing the payment.");
-          navigate("/packages"); // Redirect back to packages page
+          navigate("/packages"); 
         }
       };
 
       purchaseCourse();
     } else {
       alert("Invalid payment details. Please try again.");
-      navigate("/packages"); // Redirect back to packages page
+      navigate("/packages"); 
     }
   }, [navigate]);
 

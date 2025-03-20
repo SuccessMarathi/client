@@ -66,12 +66,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <span>Logout</span>
           </Link>
         </li>
-        <li>
-          <Link to="/admin/phonepay" onClick={toggleSidebar}>
-            <div className="icon"><FaTrash /></div>
-            <span>Phonepay Testing</span>
-          </Link>
-        </li>
       </ul>
     </div>
   );
