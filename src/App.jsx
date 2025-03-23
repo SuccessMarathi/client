@@ -86,7 +86,7 @@ const App = () => {
 
             <Route
               path="/packages"
-              element={isAuth ? <Packages user={user} /> : <Login />}
+              element={ <Packages user={user} />}
             />
 
 
