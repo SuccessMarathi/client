@@ -40,7 +40,7 @@ const Account = ({ user }) => {
   };
 
   const copyReferralLink = () => {
-    navigator.clipboard.writeText(user.referralLink);
+    navigator.clipboard.writeText(`https://successmarathi.vercel.app/packages?ref=${user.referralLink}`);
     toast.success("Referral link copied!");
   };
 
