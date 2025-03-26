@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"; 
 import axios from "axios";
 import styles from "./Packages.module.css";
 import { server } from "../../index";
+import { useNavigate } from "react-router-dom";
 
 const Packages = () => {
   const [packages, setPackages] = useState([]);
@@ -9,10 +10,19 @@ const Packages = () => {
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(null);
+  const [loginPopup, setLoginPopup] = useState(false);
+  const [btnLoading, setBtnLoading] = useState(false);
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     referral: "",
+  });
+
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
   });
 
   useEffect(() => {
@@ -29,10 +39,13 @@ const Packages = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const referralId = urlParams.get("ref");
 
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      referral: referralId || "", // Auto-fill referral if available
-    }));
+    if (referralId) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        referral: referralId,
+      }));
+      setLoginPopup(true); // Show login popup if referral ID exists
+    }
 
     fetchPackages();
   }, []);
@@ -49,8 +62,38 @@ const Packages = () => {
     setPaymentStatus(null);
   };
 
+  const closeLoginPopup = () => {
+    setLoginPopup(false);
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleLoginChange = (e) => {
+    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  };
+
+  const loginUser = async (email, password) => {
+    setBtnLoading(true);
+    try {
+      await axios.post(`${server}/api/user/login`, { email, password });
+      setLoginPopup(false); // Close login popup on success
+    } catch (error) {
+      alert("Login failed. Please check your credentials.");
+    } finally {
+      setBtnLoading(false);
+    }
+  };
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    const { email, password } = loginData;
+    if (!email || !password) {
+      alert("Please enter email and password.");
+      return;
+    }
+    await loginUser(email, password);
   };
 
   const handleFormSubmit = async (e) => {
@@ -79,6 +122,7 @@ const Packages = () => {
 
     setLoading(true);
     try {
+      console.log(formData);
       const paymentResponse = await axios.post(
         "https://phonepay-gateway-service.onrender.com/initiate-payment",
         {
@@ -133,6 +177,49 @@ const Packages = () => {
           <p>Loading packages...</p>
         )}
       </div>
+
+      {/* Login Popup */}
+      {loginPopup && (
+        <div className={styles.popup}>
+          <div className={styles.popupContent}>
+            <button className={styles.closeButton} onClick={closeLoginPopup}>
+              &times;
+            </button>
+            <h3 className={styles.popupTitle}>Login Required</h3>
+            <form onSubmit={handleLoginSubmit} className={styles.paymentForm}>
+              <div className={styles.formGroup}>
+                <label>Email:</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={loginData.email}
+                  onChange={handleLoginChange}
+                  required
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label>Password:</label>
+                <input
+                  type="password"
+                  name="password"
+                  value={loginData.password}
+                  onChange={handleLoginChange}
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className={styles.submitButton}
+                disabled={btnLoading}
+              >
+                {btnLoading ? "Logging in..." : "Login"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Popup */}
       {isPopupOpen && (
         <div className={styles.popup}>
           <div className={styles.popupContent}>
@@ -177,7 +264,7 @@ const Packages = () => {
                   <input
                     type="text"
                     name="referral"
-                    value={formData.referral} // Autofilled referral ID
+                    value={formData.referral}
                     onChange={handleChange}
                   />
                 </div>
@@ -198,6 +285,226 @@ const Packages = () => {
 };
 
 export default Packages;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import styles from "./Packages.module.css";
+// import { server } from "../../index";
+
+// const Packages = () => {
+//   const [packages, setPackages] = useState([]);
+//   const [isPopupOpen, setIsPopupOpen] = useState(false);
+//   const [selectedPackage, setSelectedPackage] = useState(null);
+//   const [loading, setLoading] = useState(false);
+//   const [paymentStatus, setPaymentStatus] = useState(null);
+//   const [formData, setFormData] = useState({
+//     name: "",
+//     email: "",
+//     referral: "",
+//   });
+
+//   useEffect(() => {
+//     const fetchPackages = async () => {
+//       try {
+//         const response = await axios.get(`${server}/api/getAllCourses`);
+//         setPackages(response.data.course);
+//       } catch (error) {
+//         console.error("Error fetching packages:", error);
+//       }
+//     };
+
+//     // Fetch referral ID from the URL if present
+//     const urlParams = new URLSearchParams(window.location.search);
+//     const referralId = urlParams.get("ref");
+
+//     setFormData((prevFormData) => ({
+//       ...prevFormData,
+//       referral: referralId || "", // Auto-fill referral if available
+//     }));
+
+//     fetchPackages();
+//   }, []);
+
+//   const openPopup = (pkg) => {
+//     setSelectedPackage(pkg);
+//     setIsPopupOpen(true);
+//     setPaymentStatus(null);
+//   };
+
+//   const closePopup = () => {
+//     setIsPopupOpen(false);
+//     setSelectedPackage(null);
+//     setPaymentStatus(null);
+//   };
+
+//   const handleChange = (e) => {
+//     setFormData({ ...formData, [e.target.name]: e.target.value });
+//   };
+
+//   const handleFormSubmit = async (e) => {
+//     e.preventDefault();
+
+//     if (!selectedPackage || !selectedPackage._id) {
+//       alert("Error: No package selected!");
+//       return;
+//     }
+
+//     const { name, email, referral } = formData;
+//     if (!name || !email) {
+//       alert("Please fill in all required fields.");
+//       return;
+//     }
+
+//     localStorage.setItem(
+//       "formData",
+//       JSON.stringify({
+//         name,
+//         email,
+//         referral,
+//         courseId: selectedPackage._id,
+//       })
+//     );
+
+//     setLoading(true);
+//     try {
+//       console.log(formData)
+//       const paymentResponse = await axios.post(
+//         "https://phonepay-gateway-service.onrender.com/initiate-payment",
+//         {
+//           amount: selectedPackage.price,
+//           redirectUrl: `${window.location.origin}/payment-success`,
+//           courseId: selectedPackage._id,
+//         }
+//       );
+
+//       if (paymentResponse.data.success) {
+//         const redirectUrl = paymentResponse.data.data?.redirectUrl;
+//         if (redirectUrl) {
+//           window.location.href = redirectUrl;
+//         } else {
+//           alert("Payment initiation failed. No redirect URL returned.");
+//         }
+//       } else {
+//         alert("Payment initiation failed. Please try again.");
+//       }
+//     } catch (error) {
+//       console.error("Error occurred during payment initiation:", error);
+//       alert("An error occurred while processing the payment.");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <section className={styles.packages}>
+//       <h2 className={styles.heading}>Our Packages</h2>
+//       <div className={styles.cardContainer}>
+//         {packages.length > 0 ? (
+//           packages.map((pkg) => (
+//             <div className={styles.card} key={pkg._id}>
+//               <img
+//                 src={`${server}/${pkg.image}`}
+//                 alt={pkg.name}
+//                 className={styles.image}
+//               />
+//               <h3 className={styles.title}>{pkg.name}</h3>
+//               <p className={styles.price}>₹{pkg.price}/-</p>
+//               <p className={styles.description}>{pkg.description}</p>
+//               <button
+//                 className={styles.buyNowButton}
+//                 onClick={() => openPopup(pkg)}
+//               >
+//                 Buy Now
+//               </button>
+//             </div>
+//           ))
+//         ) : (
+//           <p>Loading packages...</p>
+//         )}
+//       </div>
+//       {isPopupOpen && (
+//         <div className={styles.popup}>
+//           <div className={styles.popupContent}>
+//             <button className={styles.closeButton} onClick={closePopup}>
+//               &times;
+//             </button>
+//             <h3 className={styles.popupTitle}>
+//               {selectedPackage?.name} - ₹{selectedPackage?.price}
+//             </h3>
+//             {paymentStatus === "success" ? (
+//               <div className={styles.successMessage}>
+//                 <p>Payment successful! Course added to your account.</p>
+//               </div>
+//             ) : paymentStatus === "failed" ? (
+//               <div className={styles.errorMessage}>
+//                 <p>Payment failed. Please try again.</p>
+//               </div>
+//             ) : (
+//               <form onSubmit={handleFormSubmit} className={styles.paymentForm}>
+//                 <div className={styles.formGroup}>
+//                   <label>Name:</label>
+//                   <input
+//                     type="text"
+//                     name="name"
+//                     value={formData.name}
+//                     onChange={handleChange}
+//                     required
+//                   />
+//                 </div>
+//                 <div className={styles.formGroup}>
+//                   <label>Email:</label>
+//                   <input
+//                     type="email"
+//                     name="email"
+//                     value={formData.email}
+//                     onChange={handleChange}
+//                     required
+//                   />
+//                 </div>
+//                 <div className={styles.formGroup}>
+//                   <label>Referral ID (Optional):</label>
+//                   <input
+//                     type="text"
+//                     name="referral"
+//                     value={formData.referral} // Autofilled referral ID
+//                     onChange={handleChange}
+//                   />
+//                 </div>
+//                 <button
+//                   type="submit"
+//                   className={styles.submitButton}
+//                   disabled={loading}
+//                 >
+//                   {loading ? "Processing..." : "Submit Payment"}
+//                 </button>
+//               </form>
+//             )}
+//           </div>
+//         </div>
+//       )}
+//     </section>
+//   );
+// };
+
+// export default Packages;
 
 
 // import React, { useState, useEffect } from "react";
