@@ -31,6 +31,7 @@ const SuccessPage = () => {
           );
 
           if (purchaseResponse.status === 200) {
+            console.log(referral)
             alert("Payment successful! Course added to your account.");
             localStorage.removeItem("formData"); 
             navigate("/myCourses"); 
