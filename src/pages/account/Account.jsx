@@ -66,7 +66,10 @@ const Account = ({ user }) => {
               </p>
               <div className="referral-section">
                 <strong>Referral Link: </strong>
-                <span className="referral-link">{user.referralLink}</span>
+                <span className="referral-link">
+  {`https://successmarathi.vercel.app/packages?ref=${user.referralLink}`}
+</span>
+                {/* <span className="referral-link">{user.referralLink}</span> */}
                 <button onClick={copyReferralLink} className="copy-btn">
                   Copy
                 </button>
