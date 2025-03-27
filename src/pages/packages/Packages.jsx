@@ -2,112 +2,114 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./Packages.module.css";
 import { server } from "../../index";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const Packages = ({ setUser, setIsAuth, fetchMyCourse }) => {
+const Packages = () => {
   const [packages, setPackages] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(null);
+  const [loginPopup, setLoginPopup] = useState(false);
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     referral: "",
   });
-  const [loginPopup, setLoginPopup] = useState(false);
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
-  const [btnLoading, setBtnLoading] = useState(false);
-  const navigate = useNavigate();
+
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
 
   useEffect(() => {
-    console.log("Fetching packages...");
     const fetchPackages = async () => {
       try {
         const response = await axios.get(`${server}/api/getAllCourses`);
-        console.log("Packages fetched:", response.data.course);
         setPackages(response.data.course);
       } catch (error) {
         console.error("Error fetching packages:", error);
       }
     };
 
-    // Extract referral ID from the URL
+    // Check referral in URL
     const urlParams = new URLSearchParams(window.location.search);
     const referralId = urlParams.get("ref");
 
     if (referralId) {
-      console.log("Referral ID found:", referralId);
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        referral: referralId,
-      }));
-      setLoginPopup(true); // Show login popup if referral is present
+      setFormData((prev) => ({ ...prev, referral: referralId }));
+      setLoginPopup(true); // Open login popup if referral exists
     }
 
     fetchPackages();
+
+    // Check if user is already logged in
+    const token = localStorage.getItem("token");
+    if (token) setIsAuthenticated(true);
   }, []);
 
-  // Handle form input changes
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  // Handle login input changes
-  const handleLoginChange = (e) => {
-    setLoginData({ ...loginData, [e.target.name]: e.target.value });
-  };
-
-  // Login function
-  const loginUser = async (email, password) => {
-    console.log("Attempting login...");
-    setBtnLoading(true);
-    try {
-      const { data } = await axios.post(`${server}/api/user/login`, {
-        email,
-        password,
-      });
-
-      console.log("Login successful:", data);
-      toast.success(data.message);
-      localStorage.setItem("token", data.token);
-      setUser(data.user);
-      setIsAuth(true);
-      setBtnLoading(false);
-      setLoginPopup(false); // Close login popup after successful login
-      fetchMyCourse();
-    } catch (error) {
-      console.error("Login failed:", error.response?.data?.message);
-      setBtnLoading(false);
-      setIsAuth(false);
-      toast.error(error.response?.data?.message || "Login error");
-    }
-  };
-
-  // Handle login form submission
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
-    console.log("Login form submitted:", loginData);
-    loginUser(loginData.email, loginData.password);
-  };
-
-  // Handle package selection popup
   const openPopup = (pkg) => {
-    console.log("Opening package popup for:", pkg.name);
+    if (!isAuthenticated) {
+      setLoginPopup(true); // Show login popup if not logged in
+      return;
+    }
     setSelectedPackage(pkg);
     setIsPopupOpen(true);
     setPaymentStatus(null);
   };
 
   const closePopup = () => {
-    console.log("Closing package popup");
     setIsPopupOpen(false);
     setSelectedPackage(null);
     setPaymentStatus(null);
   };
 
-  // Handle package purchase form submission
+  const closeLoginPopup = () => {
+    setLoginPopup(false);
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleLoginChange = (e) => {
+    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  };
+
+  const loginUser = async (email, password) => {
+    setBtnLoading(true);
+    try {
+      const response = await axios.post(`${server}/api/user/login`, {
+        email,
+        password,
+      });
+
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token); // Store token
+        setIsAuthenticated(true);
+        setLoginPopup(false); // Close login popup
+      }
+    } catch (error) {
+      alert("Login failed. Please check your credentials.");
+    } finally {
+      setBtnLoading(false);
+    }
+  };
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    const { email, password } = loginData;
+    if (!email || !password) {
+      alert("Please enter email and password.");
+      return;
+    }
+    await loginUser(email, password);
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
@@ -134,7 +136,7 @@ const Packages = ({ setUser, setIsAuth, fetchMyCourse }) => {
 
     setLoading(true);
     try {
-      console.log("Initiating payment for:", selectedPackage.name);
+      console.log(formData);
       const paymentResponse = await axios.post(
         "https://phonepay-gateway-service.onrender.com/initiate-payment",
         {
@@ -147,7 +149,6 @@ const Packages = ({ setUser, setIsAuth, fetchMyCourse }) => {
       if (paymentResponse.data.success) {
         const redirectUrl = paymentResponse.data.data?.redirectUrl;
         if (redirectUrl) {
-          console.log("Redirecting to payment:", redirectUrl);
           window.location.href = redirectUrl;
         } else {
           alert("Payment initiation failed. No redirect URL returned.");
@@ -156,7 +157,7 @@ const Packages = ({ setUser, setIsAuth, fetchMyCourse }) => {
         alert("Payment initiation failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error occurred during payment initiation:", error);
+      console.error("Error during payment initiation:", error);
       alert("An error occurred while processing the payment.");
     } finally {
       setLoading(false);
@@ -178,10 +179,7 @@ const Packages = ({ setUser, setIsAuth, fetchMyCourse }) => {
               <h3 className={styles.title}>{pkg.name}</h3>
               <p className={styles.price}>₹{pkg.price}/-</p>
               <p className={styles.description}>{pkg.description}</p>
-              <button
-                className={styles.buyNowButton}
-                onClick={() => openPopup(pkg)}
-              >
+              <button className={styles.buyNowButton} onClick={() => openPopup(pkg)}>
                 Buy Now
               </button>
             </div>
@@ -195,8 +193,11 @@ const Packages = ({ setUser, setIsAuth, fetchMyCourse }) => {
       {loginPopup && (
         <div className={styles.popup}>
           <div className={styles.popupContent}>
-            <h3>Login Required</h3>
-            <form onSubmit={handleLoginSubmit}>
+            <button className={styles.closeButton} onClick={closeLoginPopup}>
+              &times;
+            </button>
+            <h3 className={styles.popupTitle}>Login Required</h3>
+            <form onSubmit={handleLoginSubmit} className={styles.paymentForm}>
               <div className={styles.formGroup}>
                 <label>Email:</label>
                 <input
@@ -225,27 +226,74 @@ const Packages = ({ setUser, setIsAuth, fetchMyCourse }) => {
         </div>
       )}
 
-      {/* Package Purchase Popup */}
-      {isPopupOpen && (
+{isPopupOpen && (
         <div className={styles.popup}>
           <div className={styles.popupContent}>
             <button className={styles.closeButton} onClick={closePopup}>
               &times;
             </button>
-            <h3>{selectedPackage?.name} - ₹{selectedPackage?.price}</h3>
-            <form onSubmit={handleFormSubmit}>
-              <input type="text" name="name" value={formData.name} onChange={handleChange} required />
-              <input type="email" name="email" value={formData.email} onChange={handleChange} required />
-              <button type="submit" disabled={loading}>{loading ? "Processing..." : "Submit Payment"}</button>
-            </form>
+            <h3 className={styles.popupTitle}>
+              {selectedPackage?.name} - ₹{selectedPackage?.price}
+            </h3>
+            {paymentStatus === "success" ? (
+              <div className={styles.successMessage}>
+                <p>Payment successful! Course added to your account.</p>
+              </div>
+            ) : paymentStatus === "failed" ? (
+              <div className={styles.errorMessage}>
+                <p>Payment failed. Please try again.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleFormSubmit} className={styles.paymentForm}>
+                <div className={styles.formGroup}>
+                  <label>Name:</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Email:</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Referral ID (Optional):</label>
+                  <input
+                    type="text"
+                    name="referral"
+                    value={formData.referral}
+                    onChange={handleChange}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className={styles.submitButton}
+                  disabled={loading}
+                >
+                  {loading ? "Processing..." : "Submit Payment"}
+                </button>
+                              </form>
+            )}
           </div>
-        </div>
-      )}
+     </div>
+       )} 
     </section>
   );
 };
 
 export default Packages;
+
+
+
 
 
 
