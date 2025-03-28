@@ -110,3 +110,37 @@
   z-index: 100;
   margin-top: 70px;
 }
+
+
+
+
+.delete-user-section {
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 5px;
+  text-align: center;
+  margin: 10px;
+}
+
+.delete-user-section input {
+  width: 90%;
+  padding: 5px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.delete-user-section button {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.delete-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}

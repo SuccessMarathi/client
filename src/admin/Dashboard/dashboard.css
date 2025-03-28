@@ -93,3 +93,36 @@
     font-size: 12px; /* Smaller text for very small screens */
   }
 }
+
+
+
+.delete-user-section {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 5px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.delete-user-section input {
+  width: 80%;
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.delete-user-section button {
+  background: red;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.delete-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}

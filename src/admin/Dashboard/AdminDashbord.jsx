@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Layout from "../Utils/Layout";
 import axios from "axios";
 import { server } from "../..";
+import { toast, ToastContainer } from "react-toastify"; // Import Toastify
+import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
 import "./dashboard.css";
 
 const AdminDashbord = ({ user }) => {
@@ -10,6 +12,7 @@ const AdminDashbord = ({ user }) => {
 
   const [stats, setStats] = useState([]);
   const [users, setUsers] = useState([]);
+  const [email, setEmail] = useState(""); // Input field for deleting user
 
   useEffect(() => {
     if (user && user.role !== "admin") {
@@ -50,9 +53,35 @@ const AdminDashbord = ({ user }) => {
     fetchUsers();
   }, []);
 
+  // Function to handle user deletion by email
+  const handleDeleteUser = async () => {
+    if (!email) {
+      toast.error("Please enter an email ID.");
+      return;
+    }
+
+    try {
+      await axios.delete(`${server}/api/users/delete`, {
+        data: { email }, // Sending email in request body
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+      });
+
+      toast.success("User deleted successfully!"); // Show success toast
+      setEmail(""); // Clear input field
+      fetchUsers(); // Refresh user list after deletion
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error deleting user");
+    }
+  };
+
   return (
     <div>
       <Layout>
+        <ToastContainer position="top-center" autoClose={3000} />
+        
         <div className="main-content">
           <div className="box">
             <p>Total Courses</p>
@@ -68,6 +97,19 @@ const AdminDashbord = ({ user }) => {
           </div>
         </div>
 
+        {/* Delete User Section */}
+        <div className="delete-user-section">
+          <h2>Delete User</h2>
+          <input
+            type="email"
+            placeholder="Enter user email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button onClick={handleDeleteUser}>Delete</button>
+        </div>
+
+        {/* User List Section */}
         <div className="user-list">
           <h2>User List</h2>
           <table className="user-table">
@@ -85,7 +127,7 @@ const AdminDashbord = ({ user }) => {
                   <td>{index + 1}</td>
                   <td>{user.name}</td>
                   <td>{user.contact}</td>
-                  <td>{Math.floor(user.earnings)}</td> {/* Apply Math.floor */}
+                  <td>{Math.floor(user.earnings.total)}</td> {/* Apply Math.floor */}
                 </tr>
               ))}
             </tbody>

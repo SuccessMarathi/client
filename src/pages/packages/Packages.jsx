@@ -137,6 +137,7 @@ const Packages = () => {
     setLoading(true);
     try {
       console.log(formData);
+      console.log(localStorage.getItem("token"))
       const paymentResponse = await axios.post(
         "https://phonepay-gateway-service.onrender.com/initiate-payment",
         {
