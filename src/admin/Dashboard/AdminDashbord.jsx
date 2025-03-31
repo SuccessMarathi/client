@@ -127,7 +127,8 @@ const AdminDashbord = ({ user }) => {
                   <td>{index + 1}</td>
                   <td>{user.name}</td>
                   <td>{user.contact}</td>
-                  <td>{Math.floor(user.earnings.total)}</td> {/* Apply Math.floor */}
+                  <td>{user.earnings ? Math.floor(user.earnings|| 0) : 0}</td>
+{/* Apply Math.floor */}
                 </tr>
               ))}
             </tbody>
