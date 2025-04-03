@@ -54,6 +54,57 @@
   background-color: #f1f1f1;
 }
 
+
+.send-email-section {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.send-email-section h2 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+  font-size: 20px;
+}
+
+.send-email-section input {
+  width: 90%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border 0.3s;
+}
+
+.send-email-section input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.send-email-section button {
+  width: 100%;
+  padding: 12px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.send-email-section button:hover {
+  background: #0056b3;
+}
+
+
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .main-content {
@@ -75,6 +126,21 @@
   .user-table th,
   .user-table td {
     padding: 8px; /* Adjust padding for smaller screens */
+  }
+
+  .send-email-section {
+  
+    padding: 15px;
+  }
+
+  .send-email-section h2 {
+    font-size: 18px;
+  }
+
+  .send-email-section input,
+  .send-email-section button {
+    font-size: 14px;
+    width: 20rem;
   }
 }
 
