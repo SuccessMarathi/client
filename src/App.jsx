@@ -169,6 +169,15 @@ const App = () => {
               element={isAuth ? <AdminUsers user={user} /> : <Login />}
             />
 
+	<Route
+              path="/admin/delete"
+              element={isAuth ? <AdminUsers user={user} /> : <Login />}
+            />
+<Route
+              path="/admin/lecture"
+              element={isAuth ? <AdminUsers user={user} /> : <Login />}
+            />
+
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
