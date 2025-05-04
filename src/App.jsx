@@ -39,6 +39,8 @@ import ContactUs from "./components/contact/ContactUs"
 import CancellationRefund from "./components/cnacellationRefund/CancellationRefund";
 import SuccessPage from "./components/SuccessPage";
 import FailurePage from "./components/FailurePage";
+import AddLectures from "./admin/Lectures/Addlecture";
+import DeleteCourse from "./admin/Lectures/Deletelecture";
 
 
 // import Slider from "./components/slider/Slider";
@@ -86,7 +88,7 @@ const App = () => {
 
             <Route
               path="/packages"
-              element={ <Packages user={user} />}
+              element={<Packages user={user} />}
             />
 
 
@@ -160,7 +162,7 @@ const App = () => {
               path="/success"
               element={isAuth ? <SuccessPage user={user} /> : <Login />}
             />
-             <Route
+            <Route
               path="/failure"
               element={isAuth ? <FailurePage user={user} /> : <Login />}
             />
@@ -169,13 +171,18 @@ const App = () => {
               element={isAuth ? <AdminUsers user={user} /> : <Login />}
             />
 
-	<Route
+            <Route
               path="/admin/delete"
               element={isAuth ? <AdminUsers user={user} /> : <Login />}
             />
-<Route
+            <Route
               path="/admin/lecture"
-              element={isAuth ? <AdminUsers user={user} /> : <Login />}
+              element={isAuth ? <AddLectures user={user} /> : <Login />}
+            />
+
+            <Route
+              path="/admin/lecturedelete"
+              element={isAuth ? <DeleteCourse user={user} /> : <Login />}
             />
 
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
