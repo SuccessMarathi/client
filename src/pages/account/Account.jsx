@@ -5,8 +5,8 @@ import { IoMdLogOut } from "react-icons/io";
 import { UserData } from "../../context/UserContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";  // Import axios for API calls
-import { server } from "../../"; // Import your server configuration
+import axios from "axios";
+import { server } from "../../";
 
 const Account = ({ user }) => {
   const { setIsAuth, setUser } = UserData();
@@ -52,44 +52,23 @@ const Account = ({ user }) => {
           <div className="profile-info">
             <div className="section userinfo">
               <h3>User Information</h3>
-              <p>
-                <strong>User Name: </strong>
-                {user.name}
-              </p>
-              <p>
-                <strong>Email: </strong>
-                {user.email}
-              </p>
-              <p>
-                <strong>Contact: </strong>
-                {user.contact || "N/A"}
-              </p>
+              <p><strong>User Name: </strong>{user.name}</p>
+              <p><strong>Email: </strong>{user.email}</p>
+              <p><strong>Contact: </strong>{user.contact || "N/A"}</p>
               <div className="referral-section">
                 <strong>Referral Link: </strong>
                 <span className="referral-link">
-  {`https://successmarathi.vercel.app/packages?ref=${user.referralLink}`}
-</span>
-                {/* <span className="referral-link">{user.referralLink}</span> */}
-                <button onClick={copyReferralLink} className="copy-btn">
-                  Copy
-                </button>
+                  {`https://successmarathi.vercel.app/packages?ref=${user.referralLink}`}
+                </span>
+                <button onClick={copyReferralLink} className="copy-btn">Copy</button>
               </div>
             </div>
 
             <div className="section sponsorinfo">
               <h3>Sponsor Section</h3>
-              <p>
-                <strong>Referrer Name: </strong>
-                {referrer?.name || "N/A"}
-              </p>
-              <p>
-                <strong>Referrer Email: </strong>
-                {referrer?.email || "N/A"}
-              </p>
-              <p>
-                <strong>Referrer Contact: </strong>
-                {referrer?.contact || "N/A"}
-              </p>
+              <p><strong>Referrer Name: </strong>{referrer?.name || "N/A"}</p>
+              <p><strong>Referrer Email: </strong>{referrer?.email || "N/A"}</p>
+              <p><strong>Referrer Contact: </strong>{referrer?.contact || "N/A"}</p>
             </div>
           </div>
 
@@ -103,13 +82,22 @@ const Account = ({ user }) => {
             </button>
 
             {user.role === "admin" && (
-              <button
-                onClick={() => navigate("/admin/dashboard")}
-                className="common-btn"
-              >
-                <MdDashboard />
-                Admin Dashboard
-              </button>
+              <>
+                <button
+                  onClick={() => navigate("/admin/dashboard")}
+                  className="common-btn"
+                >
+                  <MdDashboard />
+                  Admin Dashboard
+                </button>
+
+                <button
+                  onClick={() => navigate("/admin/pending-orders")}
+                  className="common-btn"
+                >
+                  Pending Orders Made
+                </button>
+              </>
             )}
 
             <button

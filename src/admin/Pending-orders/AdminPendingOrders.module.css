@@ -1,0 +1,118 @@
+.pending-orders {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  margin-top: 5rem;
+}
+
+.pending-orders h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+thead {
+  background-color: #f7f7f7;
+}
+
+th,
+td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  font-weight: 600;
+  color: #444;
+}
+
+tr:hover {
+  background-color: #f9f9f9;
+}
+
+.approve-btn,
+.reject-btn {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.approve-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.approve-btn:hover {
+  background-color: #45a045;
+}
+
+.reject-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.reject-btn:hover {
+  background-color: #d8352d;
+}
+
+@media (max-width: 768px) {
+  .pending-orders {
+    padding: 1rem;
+  }
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  th,
+  td {
+    padding: 10px;
+    text-align: right;
+    position: relative;
+  }
+
+  th::before,
+  td::before {
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  tr {
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+  }
+
+  th:nth-child(1)::before { content: "User"; }
+  th:nth-child(2)::before { content: "Email"; }
+  th:nth-child(3)::before { content: "Course"; }
+  th:nth-child(4)::before { content: "UTR"; }
+  th:nth-child(5)::before { content: "Referrer"; }
+  th:nth-child(6)::before { content: "Action"; }
+}

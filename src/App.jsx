@@ -42,6 +42,8 @@ import FailurePage from "./components/FailurePage";
 import AddLectures from "./admin/Lectures/Addlecture";
 import DeleteCourse from "./admin/Lectures/Deletelecture";
 
+import AdminPendingOrders from "./admin/Pending-orders/AdminPendingOrders";
+
 
 // import Slider from "./components/slider/Slider";
 
@@ -169,6 +171,10 @@ const App = () => {
             <Route
               path="/admin/users"
               element={isAuth ? <AdminUsers user={user} /> : <Login />}
+            />
+            <Route
+              path="/admin/pending-orders"
+              element={isAuth ? <AdminPendingOrders user={user} /> : <Login />}
             />
 
             <Route
