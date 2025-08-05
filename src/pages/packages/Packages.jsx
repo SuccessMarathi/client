@@ -145,7 +145,7 @@ const Packages = () => {
         },
         {
           headers: {
-            token: token, // 👈 Your backend is expecting `req.headers.token`
+            token: localStorage.getItem("token") // 👈 Your backend is expecting `req.headers.token`
           },
         }
       );
