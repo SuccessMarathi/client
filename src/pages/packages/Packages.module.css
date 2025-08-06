@@ -97,6 +97,7 @@
     position: relative;
     width: 90%;
     max-width: 400px;
+    padding-top: 2rem;
   }
   
   .closeButton {
@@ -107,7 +108,9 @@
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-  }
+    margin-top: 1.5rem;
+    margin-right: 1.5rem;
+      }
   
   .popupTitle {
     font-size: 1.3rem;
@@ -116,7 +119,7 @@
   }
   
   .qrCode {
-    width: 100%;
+    width: 70%;
     max-height:180px;
     object-fit: contain;
     margin-bottom: 1rem;

@@ -1,101 +1,45 @@
 .container {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
-    margin: 40px auto;
-    min-height: 70vh;
-  }
-  
-  .container h1 {
-    align-self: center;
-    text-align: center;
-    margin-top: 50px;
-  }
-  
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-  
-  .table th,
-  .table td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .table th {
-    background-color: #FF8C00;
-    color: black;
-    font-weight: bolder;
-  }
-  
-  .table td:first-child,
-  .table th:first-child {
-    text-align: center; /* Center-align serial numbers */
-    width: 50px; /* Fixed width for serial number column */
-  }
-  
-  .table tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .loader {
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    margin-top: 20px;
-  }
-  
-  .noData {
-    text-align: center;
-    font-size: 16px;
-    color: gray;
-    padding: 20px;
-  }
-  
-  /* Responsive Design */
-  @media screen and (max-width: 768px) {
-    .container {
-      padding: 15px;
-    }
-  
-    .table {
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      white-space: nowrap;
-      align-self: center;
-      justify-self: center;
-      padding-left: 3rem;
-    }
-  
-    .table th,
-    .table td {
-      padding: 10px;
-      font-size: 14px;
-    }
-  
-    .table td:first-child,
-    .table th:first-child {
-      width: 40px; /* Adjusted width for smaller screens */
-    }
-  }
-  
-  @media screen and (max-width: 480px) {
-    .container {
-      padding: 10px;
-   
-    }
-  
-    .table th,
-    .table td {
-      padding: 8px;
-      font-size: 12px;
-    }
-  }
-  
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+  margin-top: 5rem;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.headerRow,
+.affiliateRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #ccc;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.headerItem {
+  flex: 1;
+  font-weight: 600;
+  text-align: center;
+}
+
+.affiliateItem {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+}
+
+.loading,
+.empty {
+  text-align: center;
+  padding: 20px;
+  font-size: 16px;
+  color: gray;
+}

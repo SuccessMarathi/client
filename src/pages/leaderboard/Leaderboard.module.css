@@ -1,74 +1,77 @@
 .container {
+  width: 90%;
   max-width: 800px;
-  margin: auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  padding: 0 1rem;
+  margin-top: 7rem;
 }
 
-.header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  font-size: 2rem;
-  color: #ff6523; /* Gold color for crown */
-  margin-bottom: 10px;
-  margin-top: 5rem;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table th,
-.table td {
-  padding: 12px;
+.heading {
   text-align: center;
-  border-bottom: 1px solid #ddd;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
 }
 
-.table th {
-  background-color: #333;
-  color: white;
+.loading {
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 2rem;
 }
 
-.profileImage {
-  width: 40px;
-  height: 40px;
+.row {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  margin-bottom: 0.75rem;
+  border-radius: 8px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.rank {
+  width: 2rem;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.imageBox {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 1rem;
+  flex-shrink: 0;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #d4af37; /* Gold border */
 }
 
-.defaultAvatar {
-  width: 40px;
-  height: 40px;
-
-  background-color: #ccc;
+.placeholder {
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
+  background-color: #dee2e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.5rem;
-  color: white;
-  align-self: center;
-  justify-self: center;
 }
 
-.loader {
-  text-align: center;
-  font-size: 1.5rem;
-  padding: 20px;
-  color: #555;
+.info {
+  display: flex;
+  flex-direction: column;
 }
 
+.name {
+  font-weight: 600;
+  font-size: 1rem;
+}
 
-@media(max-width:768px){
-  .header{
-    font-size: 2rem;
-  }
-
-  .title{
-    font-size: 2rem;
-  }
+.earnings {
+  font-size: 1.2rem;
+  color: black;
 }

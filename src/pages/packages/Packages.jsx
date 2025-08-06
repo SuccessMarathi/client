@@ -3,6 +3,7 @@ import axios from "axios";
 import styles from "./Packages.module.css";
 import { server } from "../../index";
 import { useNavigate } from "react-router-dom";
+import qr from './qr.jpg'
 
 const Packages = () => {
   const [packages, setPackages] = useState([]);
@@ -242,7 +243,7 @@ const Packages = () => {
             </h3>
             {paymentStatus === "success" ? (
               <div className={styles.successMessage}>
-                <p>Payment successful! Course added to your account.</p>
+                <p>Payment successful! Course will be added to your account.</p>
               </div>
             ) : paymentStatus === "failed" ? (
               <div className={styles.errorMessage}>
@@ -251,9 +252,9 @@ const Packages = () => {
             ) : (
               <form onSubmit={handleFormSubmit} className={styles.paymentForm}>
                 <div className={styles.qrSection}>
-                  <img src="/qr.png" alt="QR Code" className={styles.qrImage} />
+                  <img src={qr} alt="QR Code" className={styles.qrImage} />
                   <p>
-                    <strong>UPI ID:</strong> yourupi@bank
+                    <strong>UPI ID:</strong> akashrathod7823041@ybl
                     <button
                       type="button"
                       onClick={() => navigator.clipboard.writeText("yourupi@bank")}
